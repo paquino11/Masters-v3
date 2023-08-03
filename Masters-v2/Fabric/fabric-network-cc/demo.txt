@@ -1,0 +1,15 @@
+one terminal
+
+cd fabric-samples/test-network
+./network.sh down
+./network.sh up createChannel -c dtnetwork -ca -s couchdb
+./network.sh deployCC -c dtnetwork -ccn chaincode1 -ccp /home/pedro/Desktop/FabricNetwork/chaincode1 -ccl go 
+
+another terminal
+cd asset-transfer-basic/application-gateway-typescript
+npm install
+npm start
+
+
+
+

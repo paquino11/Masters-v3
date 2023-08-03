@@ -1,0 +1,84 @@
+cd /Desktop/FabricNetwork/fabric-samples/test-network
+//put network down
+./network.sh down
+
+//put network up and create channel with name mychannel
+./network.sh up createChannel
+./network.sh up createChannel -c dtnetwork -ca -s couchdb
+
+//deploy chaincode on peer0.org1 and peer0.org2 and channel
+./network.sh deployCC -c mychannel -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go
+./network.sh deployCC -c dtnetwork -ccn chaincode1 -ccp /home/pedro/Desktop/FabricNetwork/chaincode1 -ccl go 
+
+
+//interact with the network as peer0.org1
+export PATH=${PWD}/../bin:$PATH
+export FABRIC_CFG_PATH=$PWD/../config/
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_LOCALMSPID="Org1MSP"
+export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+export CORE_PEER_ADDRESS=localhost:7051
+
+//init ledger
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C mychannel -n basic --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"InitLedger","Args":[]}'
+
+//query all assets
+peer chaincode query -C mychannel -n basic -c '{"Args":["GetAllAssets"]}'
+
+//write on ledger, Because the endorsement policy for the asset-transfer (basic) chaincode requires the transaction to be signed by Org1 and Org2, the chaincode invoke command needs to target both peer0.org1.example.com and peer0.org2.example.com using the --peerAddresses flag. Because TLS is enabled for the network, the command also needs to reference the TLS certificate for each peer using the --tlsRootCertFiles flag.
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C mychannel -n basic --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"InitLedger","Args":[]}'
+peer chaincode invoke -o localhost:7050 
+                        --ordererTLSHostnameOverride orderer.example.com 
+                        --tls 
+                        --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" 
+                        -C mychannel 
+                        -n basic 
+                        --peerAddresses 
+                        localhost:7051 
+                        --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" 
+                        --peerAddresses localhost:9051 
+                        --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" 
+                        -c '{"function":"TransferAsset","Args":["asset6","Pedro"]}'
+
+//interact with the network as peer0.org2
+export PATH=${PWD}/../bin:$PATH
+export FABRIC_CFG_PATH=$PWD/../config/
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_LOCALMSPID="Org2MSP"
+export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
+export CORE_PEER_ADDRESS=localhost:9051
+
+//query ledger as peer0.org2
+peer chaincode query -C mychannel -n basic -c '{"Args":["ReadAsset","asset6"]}'
+
+//add org3
+cd addOrg3
+./addOrg3.sh up -c mychannel
+
+//interact with network as org3
+cd ..
+export PATH=${PWD}/../bin:$PATH
+export FABRIC_CFG_PATH=$PWD/../config/
+export CORE_PEER_TLS_ENABLED=true
+export CORE_PEER_LOCALMSPID="Org3MSP"
+export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org3.example.com/peers/peer0.org3.example.com/tls/ca.crt
+export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org3.example.com/users/Admin@org3.example.com/msp
+export CORE_PEER_ADDRESS=localhost:11051
+
+//package the chaincode
+peer lifecycle chaincode package chaincode1.tar.gz --path /home/pedro/Desktop/FabricNetwork/chaincode1 --lang golang --label chaincode1
+
+//install the chaincode
+peer lifecycle chaincode install chaincode1.tar.gz
+
+//
+peer lifecycle chaincode queryinstalled
+export CC_PACKAGE_ID=basic_1:ef2394600055b69053a488d0ea2ac66bd544e93bb1b272a68d8860df5ac82c8c
+peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" --channelID dtnetwork --name chaincode1 --version 1.0 --package-id $CC_PACKAGE_ID --sequence 1
+
+
+//You can use the peer lifecycle chaincode querycommitted command to check if the chaincode definition you have approved has already been committed to the channel.
+peer lifecycle chaincode querycommitted --channelID dtnetwork --name chaincode1 --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
+

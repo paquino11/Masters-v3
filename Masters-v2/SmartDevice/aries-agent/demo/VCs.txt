@@ -1,0 +1,26 @@
+Enroolment VC
+{
+    "type",
+    "name",
+    "enrollDate",
+    "timestamp"
+}
+
+
+
+Genesis VC
+{
+    "manufactureDate",
+    "name",
+    "timestamp",
+    "deviceModelId",
+    "deviceId"
+}
+
+Ownership VC
+{
+    "deviceId",
+    "deviceModelId",
+    "timestamp",
+    "acquisitionDate"
+}

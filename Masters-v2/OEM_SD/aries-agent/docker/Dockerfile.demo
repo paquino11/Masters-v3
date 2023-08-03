@@ -1,0 +1,56 @@
+FROM bcgovimages/von-image:py36-1.15-1
+
+ENV ENABLE_PTVSD 0
+ENV ENABLE_PYDEVD_PYCHARM 0
+ENV PYDEVD_PYCHARM_HOST "host.docker.internal"
+ENV ACAPY_DEBUG_WEBHOOKS 1
+
+RUN mkdir bin && curl -L -o bin/jq \
+	https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && \
+	chmod ug+x bin/jq
+
+RUN curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh && chmod +x install-fabric.sh
+RUN ./install-fabric.sh b
+RUN export PATH=/bin:$PATH
+RUN export FABRIC_CFG_PATH=/config/
+
+RUN mkdir orgs
+
+##ADD organizations ./orgs
+
+# Add and install Indy Agent code
+ADD requirements*.txt ./
+
+RUN pip3 install --no-cache-dir \
+	-r requirements.txt \
+	-r requirements.askar.txt \
+	-r requirements.bbs.txt \
+	-r requirements.dev.txt
+
+ADD aries_cloudagent ./aries_cloudagent
+ADD bin ./bin
+ADD README.md ./
+ADD scripts ./scripts
+ADD setup.py ./
+
+RUN pip3 install --no-cache-dir -e .
+
+RUN mkdir demo logs && chown -R indy:indy demo logs && chmod -R ug+rw demo logs
+
+# Add and install demo code
+ADD demo/requirements.txt ./demo/requirements.txt
+RUN pip3 install --no-cache-dir -r demo/requirements.txt
+
+# Add local binaries and aliases to path
+ENV PATH="$HOME/.local/bin:$PATH"
+ENV PATH="$HOME/bin:$PATH"
+ENV FABRIC_CFG_PATH="$HOME/config/"
+ENV CORE_PEER_TLS_ENABLED=true
+ENV CORE_PEER_LOCALMSPID=Org1MSP
+ENV CORE_PEER_TLS_ROOTCERT_FILE="$HOME/orgs/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt"
+ENV CORE_PEER_MSPCONFIGPATH="$HOME/orgs/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp"
+ENV CORE_PEER_ADDRESS=localhost:7051
+	
+ADD demo ./demo
+
+ENTRYPOINT ["bash", "-c", "demo/ngrok-wait.sh \"$@\"", "--"]
