@@ -2014,37 +2014,26 @@ def main():
 
     #deploy IPFS
     logger.debug('Deploying IPFS local node')
-    os.chdir("/home/pedro/Desktop/Aries-Agents/testUsecases/IPFSDeployment")
+    os.chdir("IPFSDeployment")
     command = 'python3 deploy_ipfs.py'
     process = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     
     #deploy Fabric Network
     logger.debug('Deploying Fabric Network')
-    os.chdir("/home/pedro/Desktop/Aries-Agents/testUsecases/FabricDeployment")
+    os.chdir("../FabricDeployment")
+
     command = 'python3 deploy_fabric.py'
     process = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     
     #deploy agents
     logger.debug('Deploying Aries Agents')
-    os.chdir("/home/pedro/Desktop/Aries-Agents/testUsecases/AgentsDeployment")
+    os.chdir("../AgentsDeployment")
     command = 'python3 deploy_agents.py'
     process = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     print("All containers deployed")
 
 
-    #input()  # This line waits for the user to press Enter
-
-    #while True:
-    #   # Code inside this block will be executed repeatedly in an infinite loop
-    #    user_input = input("")
-    #    
-    #    if user_input.lower() == 'start':
-    #       break  # Break out of the loop if the user enters 'exit'
-
-
-    #c_1_admin_api_call()
-    #USE CASE 1
     oem_enrollment1()
 
 
