@@ -2033,8 +2033,8 @@ def main():
 
     print("All containers deployed")
 
-
     oem_enrollment1()
+
 
 
     #USE CASE 2

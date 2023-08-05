@@ -22,15 +22,19 @@ def run_egw():
     print('Deploying Edge Gateway Agent')
     #os.chdir("/home/pedro/Desktop/Aries-Agents/demo")
     command = 'LEDGER_URL=http://dev.greenlight.bcovrin.vonx.io ./run gatewayv2'
-    #process = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    #os.chdir("/home/pedro/Desktop/Aries-Agents/Masters-v2/Gateway")
-    #command = 'python3 initGateway.py'
     process = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    os.chdir("../Masters-v2/Gateway/")
+    command = 'python3 initGateway.py'
+    process = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
 
 def run_sd():
     print('Deploying Smart Device Agent')
-    #os.chdir("/home/pedro/Desktop/Aries-Agents/demo")
+    os.chdir("../../demo/")
     command = 'LEDGER_URL=http://dev.greenlight.bcovrin.vonx.io ./run smartdevice'
+    process = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    os.chdir("../Masters-v2/SmartDevice/")
+    command = 'python3 initSD.py'
     process = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 def run_alice():
