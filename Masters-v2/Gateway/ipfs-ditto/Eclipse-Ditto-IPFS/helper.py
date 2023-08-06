@@ -10,14 +10,9 @@ import requests
 load_dotenv()
 
 # General configs
-MONGO_DB_CLIENT = os.environ.get("MONGO_DB_CLIENT", "docker_mongodb_1:27017")
-IPFS_CLIENT = "localhost"#os.environ.get("IPFS_CLIENT", "ditto-ipfs")
+MONGO_DB_CLIENT = "docker_mongodb_1:27017"#os.environ.get("MONGO_DB_CLIENT", "docker_mongodb_1:27017")
+IPFS_CLIENT = "ipfs"#os.environ.get("IPFS_CLIENT", "ditto-ipfs")
 IPFS_CLIENT_PORT = 5002#os.environ.get("IPFS_CLIENT_PORT", 5001)
-
-# Eclipse Ditto MongoDB configs
-mongoClient = pymongo.MongoClient(f"mongodb://{MONGO_DB_CLIENT}")
-database = mongoClient["things"]
-collection = database["things_journal"]
 
 # IPFS configssd
 try:
@@ -26,6 +21,12 @@ try:
     # You can now use the 'ipfs' object to interact with IPFS, e.g., ipfs.cat(), ipfs.add(), etc.
 except Exception as e:
     print("Connection to IPFS client failed. Error:", str(e))
+
+
+# Eclipse Ditto MongoDB configs
+mongoClient = pymongo.MongoClient(f"mongodb://{MONGO_DB_CLIENT}")
+database = mongoClient["things"]
+collection = database["things_journal"]
 
 def save_ditto_things_ipfs():
     last_hour_things = ditto_data_to_file()
@@ -36,7 +37,7 @@ def save_ditto_things_ipfs():
 
 
 def save_ipfs_hash_on_fabric(ipfs_hash):
-    url = "http://localhost:3025/regdataset"
+    url = "http://fabric-gateway:3025/regdataset"
     payload = {"string": ipfs_hash}
     response = requests.post(url, json=payload)
     
@@ -44,7 +45,6 @@ def save_ipfs_hash_on_fabric(ipfs_hash):
         print("Hash sent successfully to Fabric!")
     else:
         print("Failed to send string to the server.")
-
 
 
 def get_last_hour_things():

@@ -1,0 +1,10 @@
+REQUISITES:
+
+vim
+jq 
+golang-go
+docker
+sudo apt-get install git curl docker-compose -y
+./install-fabric.sh d b
+nodejs
+npm

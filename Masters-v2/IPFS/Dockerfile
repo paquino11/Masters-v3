@@ -1,33 +1,26 @@
-# Use nginx as the base image
-FROM nginx:latest
 
-# Install Python 3, python3-venv, and other necessary dependencies
-RUN apt-get update && \
-    apt-get install -y python3 python3-venv python3-pip curl
+FROM golang:1.11
 
-RUN curl -fsSL https://github.com/ipfs/go-ipfs/releases/download/v0.10.0/go-ipfs_v0.10.0_linux-amd64.tar.gz | tar xz
+ENV API_PORT 5002
+ENV GATEWAY_PORT 8080
+ENV SWARM_PORT 4001
 
-RUN mv go-ipfs/ipfs /usr/local/bin
-RUN rm -rf go-ipfs
+EXPOSE ${SWARM_PORT}
+# This may introduce security risk to expose API_PORT public
+EXPOSE ${API_PORT}
+EXPOSE ${GATEWAY_PORT}
 
-# Copy the application files into the container
-COPY . /app
+# Install ipfs using ipfs-update and initialize
+RUN go get -u github.com/ipfs/ipfs-update \
+    && ipfs-update install latest \
+    && ipfs init
 
-# Set the working directory
-WORKDIR /app
+# config the api endpoint, may introduce security risk to expose API_PORT public
+RUN ipfs config Addresses.API /ip4/0.0.0.0/tcp/${API_PORT}
 
-# Create a virtual environment and activate it
-RUN python3 -m venv venv
-ENV PATH="/app/venv/bin:$PATH"
+# config the gateway endpoint
+RUN ipfs config Addresses.Gateway /ip4/0.0.0.0/tcp/${GATEWAY_PORT}
 
-# Install ipfshttpclient inside the virtual environment
-RUN /app/venv/bin/pip install --no-cache-dir ipfshttpclient
-
-# Install the required Python packages from requirements.txt inside the virtual environment
-RUN /app/venv/bin/pip install --no-cache-dir -r requirements.txt
-
-# Expose port 5001
-EXPOSE 5001
-
-# Command to run your application
-CMD ["/bin/bash", "-c", "source .env && ipfs daemon --init"]
+# by default, run `ipfs daemon` to start as a running node
+ENTRYPOINT ["ipfs"]
+CMD ["daemon"]

@@ -13,7 +13,7 @@ python3 deploy_fabric.py
 ## Deploy fabric app gateway
 cd /home/pedro/Desktop/Aries-Agents/Masters-v2/Fabric/fabric-network-cc/fabric-samples
 docker build -t fabric-gateway .
-docker run -d -p 3025:3025 --name fabric-gateway --network fabric_test fabric-gateway
+docker run -d -p 3025:3025 --name fabric-gateway --network docker_default fabric-gateway
 
 
 

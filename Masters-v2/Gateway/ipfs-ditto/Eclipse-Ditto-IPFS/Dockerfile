@@ -1,33 +1,18 @@
-# Use nginx as the base image
-FROM nginx:latest
+# Use the official Python image as the base image
+FROM python:3.8-slim
 
-# Install Python 3, python3-venv, and other necessary dependencies
-RUN apt-get update && \
-    apt-get install -y python3 python3-venv python3-pip curl
-
-RUN curl -fsSL https://github.com/ipfs/go-ipfs/releases/download/v0.10.0/go-ipfs_v0.10.0_linux-amd64.tar.gz | tar xz
-
-RUN mv go-ipfs/ipfs /usr/local/bin
-RUN rm -rf go-ipfs
-
-# Copy the application files into the container
-COPY . /app
-
-# Set the working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Create a virtual environment and activate it
-RUN python3 -m venv venv
-ENV PATH="/app/venv/bin:$PATH"
+# Copy the requirements.txt file first to leverage Docker cache
+COPY . .
 
-# Install ipfshttpclient inside the virtual environment
-RUN /app/venv/bin/pip install --no-cache-dir ipfshttpclient
+# Install required packages
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install the required Python packages from requirements.txt inside the virtual environment
-RUN /app/venv/bin/pip install --no-cache-dir -r requirements.txt
+# Copy the app.py and helper.py files into the container
+COPY app.py .
+COPY helper.py .
 
-# Expose port 5001
-EXPOSE 5001/tcp
-
-# Command to run your application
-CMD ["/bin/bash", "-c", "source .env && (ipfs daemon --init &) && /app/venv/bin/python app.py"]
+# Run the app.py file
+CMD ["python", "app.py"]
