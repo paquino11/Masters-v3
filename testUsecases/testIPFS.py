@@ -2,10 +2,20 @@ import ipfsApi
 import requests
 import json
 
-
 def write_to_ipfs(file_path):
+    file_hash = None  # Set a default value for the file_hash
     try:
-        api = ipfsApi.Client('127.0.0.1', 5001)  # Connect to the IPFS daemon
+        IPFS_CLIENT = "localhost"  # Replace with your IPFS client address
+        IPFS_CLIENT_PORT = 5002  # Replace with your IPFS client port
+
+        try:
+            api = ipfsApi.Client(IPFS_CLIENT, IPFS_CLIENT_PORT)
+            print("Connection to IPFS client was established successfully!")
+            # You can now use the 'ipfs' object to interact with IPFS, e.g., ipfs.cat(), ipfs.add(), etc.
+        except Exception as e:
+            print("Connection to IPFS client failed. Error:", str(e))
+            return file_hash  # Return the default value if the connection fails
+
         res = api.add(file_path)  # Add the file to IPFS
         file_hash = res[0]['Hash']  # Access the first element in the list
         print("File uploaded to IPFS with hash:", file_hash)
@@ -36,9 +46,8 @@ def delete_from_ipfs(file_hash):
             print("Response:", remove_response.text)
     except Exception as e:
         print("An error occurred:", str(e))
+
+
 # Example usage
-file_path = "/home/pedro/Desktop/Aries-Agents/testUsecases/ipfs.txt"
+file_path = "/home/pedro/Desktop/Masters-v3/testUsecases/ipfs.txt"
 ipfshash = write_to_ipfs(file_path)
-
-
-delete_from_ipfs(ipfshash)

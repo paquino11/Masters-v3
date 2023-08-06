@@ -2021,7 +2021,6 @@ def main():
     #deploy Fabric Network
     logger.debug('Deploying Fabric Network')
     os.chdir("../FabricDeployment")
-
     command = 'python3 deploy_fabric.py'
     process = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     

@@ -1,7 +1,6 @@
 import pymongo
 import json
 import ipfsApi
-import ipfshttpclient
 from datetime import datetime, timedelta
 import os
 from dotenv import load_dotenv
@@ -11,17 +10,22 @@ import requests
 load_dotenv()
 
 # General configs
-MONGO_DB_CLIENT = os.environ.get("MONGO_DB_CLIENT", "docker-mongodb-1:27017")
-IPFS_CLIENT = os.environ.get("IPFS_CLIENT", "127.0.0.1")
-IPFS_CLIENT_PORT = os.environ.get("IPFS_CLIENT_PORT", 5001)
+MONGO_DB_CLIENT = os.environ.get("MONGO_DB_CLIENT", "docker_mongodb_1:27017")
+IPFS_CLIENT = "localhost"#os.environ.get("IPFS_CLIENT", "ditto-ipfs")
+IPFS_CLIENT_PORT = 5002#os.environ.get("IPFS_CLIENT_PORT", 5001)
 
 # Eclipse Ditto MongoDB configs
 mongoClient = pymongo.MongoClient(f"mongodb://{MONGO_DB_CLIENT}")
 database = mongoClient["things"]
 collection = database["things_journal"]
 
-# IPFS configs
-ipfs = ipfsApi.Client(IPFS_CLIENT, IPFS_CLIENT_PORT)
+# IPFS configssd
+try:
+    ipfs = ipfsApi.Client(IPFS_CLIENT, IPFS_CLIENT_PORT)
+    print("Connection to IPFS client was established successfully!")
+    # You can now use the 'ipfs' object to interact with IPFS, e.g., ipfs.cat(), ipfs.add(), etc.
+except Exception as e:
+    print("Connection to IPFS client failed. Error:", str(e))
 
 def save_ditto_things_ipfs():
     last_hour_things = ditto_data_to_file()

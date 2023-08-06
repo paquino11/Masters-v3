@@ -27,7 +27,7 @@ RUN /app/venv/bin/pip install --no-cache-dir ipfshttpclient
 RUN /app/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # Expose port 5001
-EXPOSE 5001/tcp
+EXPOSE 5001
 
 # Command to run your application
-CMD ["/bin/bash", "-c", "source .env && (ipfs daemon --init &) && /app/venv/bin/python app.py"]
+CMD ["/bin/bash", "-c", "source .env && ipfs daemon --init"]
