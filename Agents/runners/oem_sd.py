@@ -64,7 +64,7 @@ class OEMAgent(AriesAgent):
             ident,
             http_port,
             admin_port,
-            prefix="OEM",
+            prefix="OEM_SD",
             no_auto=no_auto,
             endorser_role=endorser_role,
             revocation=revocation,
@@ -822,7 +822,7 @@ async def main(args):
     print(CONS_PUB_DID)
     
     total_start_time = time.time()
-    oem_agent = await create_agent_with_args(args, ident="oem")
+    oem_agent = await create_agent_with_args(args, ident="oem_sd")
 
     last_result = None
     async def check_for_new_connection(n, lr):
@@ -937,7 +937,7 @@ async def main(args):
             )
         )
         agent = OEMAgent(
-            "oem.agent",
+            "oem.sd.agent",
             oem_agent.start_port,
             oem_agent.start_port + 1,
             genesis_data=oem_agent.genesis_txns,
@@ -966,8 +966,8 @@ async def main(args):
             oem_agent.public_did = True
             await oem_agent.initialize(
                 the_agent=agent,
-                schema_name=sd_gw_schema_name,
-                schema_attrs=sd_gw_schema_attrs,
+                #schema_name=sd_gw_schema_name,
+                #schema_attrs=sd_gw_schema_attrs,
                 create_endorser_agent=(oem_agent.endorser_role == "author")
                 if oem_agent.endorser_role
                 else False,
@@ -978,10 +978,6 @@ async def main(args):
         else:
             raise Exception("Invalid credential type:" + oem_agent.cred_type)
 
-        total_end_time = time.time()
-        total_execution_time = total_end_time - total_start_time
-        print(f"{GREEN}Deploy OEM Agent: {total_execution_time} seconds{RESET}")
-
         #create SD and GW schema and credential def
         ownership_schema_name = "ownership_schema"
         ownership_schema_attrs = [
@@ -990,27 +986,10 @@ async def main(args):
             "ownership_date",
             "timestamp",
         ]
-        oem_agent.cred_def_id_ownership = await oem_agent.create_schema_and_cred_def_ownership(
-                ownership_schema_name, ownership_schema_attrs
-            )
+        #oem_agent.cred_def_id_ownership = await oem_agent.create_schema_and_cred_def_ownership(
+        #        ownership_schema_name, ownership_schema_attrs
+        #    )
 
-
-        # generate an invitation for agent
-        #await oem_agent.generate_invitation(
-        #    display_qr=True, reuse_connections=oem_agent.reuse_connections, wait=True
-        #)
-        #log_status("#9 Input invitation details")
-        #await input_invitation(oem_agent)
-        """total_start_time = time.time()
-        log_status("Implicit Invitation to Consortium.\nConsortium Pub DID: "+ CONS_PUB_DID)
-        implicit_invitation = await oem_agent.agent.admin_POST(f"/didexchange/create-request?their_public_did={CONS_PUB_DID}&use_public_did=true")
-        connectionid = implicit_invitation['connection_id']
-        oem_agent.agent.connection_id = connectionid
-        print(connectionid)
-        total_end_time = time.time()
-        total_execution_time = total_end_time - total_start_time
-        print(f"{GREEN}Implicit Invitation: {total_execution_time} seconds{RESET}")
-        """
         exchange_tracing = False
         options = (
             "    (1a) Issue GW Credential\n"

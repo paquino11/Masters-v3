@@ -765,14 +765,11 @@ class AgentContainer:
         await self.agent.listen_webhooks(self.start_port + 2)
 
         # create public DID ... UNLESS we are an author ...
-        total_start_time = time.time()
         if (not self.endorser_role) or (self.endorser_role == "endorser"):
             if self.public_did and self.cred_type != CRED_FORMAT_JSON_LD:
                 await self.agent.register_did(cred_type=CRED_FORMAT_INDY)
-                log_msg("Created public DID2")
-                total_end_time = time.time()
-                total_execution_time = total_end_time - total_start_time
-                print(f"{GREEN}Create Public DID: {total_execution_time} seconds{RESET}")
+                log_msg("Created public DID")
+
 
 
         # if we are endorsing, create the endorser agent first, then we can use the

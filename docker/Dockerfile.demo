@@ -35,22 +35,16 @@ ADD setup.py ./
 
 RUN pip3 install --no-cache-dir -e .
 
-RUN mkdir demo logs && chown -R indy:indy demo logs && chmod -R ug+rw demo logs
+RUN mkdir Agents logs && chown -R indy:indy Agents logs && chmod -R ug+rw Agents logs
 
 # Add and install demo code
-ADD demo/requirements.txt ./demo/requirements.txt
-RUN pip3 install --no-cache-dir -r demo/requirements.txt
+ADD Agents/requirements.txt ./Agents/requirements.txt
+RUN pip3 install --no-cache-dir -r Agents/requirements.txt
 
 # Add local binaries and aliases to path
 ENV PATH="$HOME/.local/bin:$PATH"
 ENV PATH="$HOME/bin:$PATH"
-ENV FABRIC_CFG_PATH="$HOME/config/"
-ENV CORE_PEER_TLS_ENABLED=true
-ENV CORE_PEER_LOCALMSPID=Org1MSP
-ENV CORE_PEER_TLS_ROOTCERT_FILE="$HOME/orgs/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt"
-ENV CORE_PEER_MSPCONFIGPATH="$HOME/orgs/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp"
-ENV CORE_PEER_ADDRESS=localhost:7051
 	
-ADD demo ./demo
+ADD Agents ./Agents
 
-ENTRYPOINT ["bash", "-c", "demo/ngrok-wait.sh \"$@\"", "--"]
+ENTRYPOINT ["bash", "-c", "Agents/ngrok-wait.sh \"$@\"", "--"]

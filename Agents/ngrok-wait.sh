@@ -28,4 +28,4 @@ fi
 export AGENT_NAME=$1
 shift
 echo "Starting [$AGENT_NAME] agent with args [$@]"
-python -m demo.runners.$AGENT_NAME $@
+python -m Agents.runners.$AGENT_NAME $@

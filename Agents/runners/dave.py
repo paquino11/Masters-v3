@@ -111,38 +111,38 @@ async def input_invitation(agent_container):
 
 
 async def main(args):
-    alice_agent = await create_agent_with_args(args, ident="alice")
+    dave_agent = await create_agent_with_args(args, ident="alice")
 
     try:
         log_status(
             "#7 Provision an agent and wallet, get back configuration details"
             + (
-                f" (Wallet type: {alice_agent.wallet_type})"
-                if alice_agent.wallet_type
+                f" (Wallet type: {dave_agent.wallet_type})"
+                if dave_agent.wallet_type
                 else ""
             )
         )
         agent = DaveAgent(
             "dave.agent",
-            alice_agent.start_port,
-            alice_agent.start_port + 1,
-            genesis_data=alice_agent.genesis_txns,
-            genesis_txn_list=alice_agent.genesis_txn_list,
-            no_auto=alice_agent.no_auto,
-            tails_server_base_url=alice_agent.tails_server_base_url,
-            revocation=alice_agent.revocation,
-            timing=alice_agent.show_timing,
-            multitenant=alice_agent.multitenant,
-            mediation=alice_agent.mediation,
-            wallet_type=alice_agent.wallet_type,
-            aip=alice_agent.aip,
-            endorser_role=alice_agent.endorser_role,
+            dave_agent.start_port,
+            dave_agent.start_port + 1,
+            genesis_data=dave_agent.genesis_txns,
+            genesis_txn_list=dave_agent.genesis_txn_list,
+            no_auto=dave_agent.no_auto,
+            tails_server_base_url=dave_agent.tails_server_base_url,
+            revocation=dave_agent.revocation,
+            timing=dave_agent.show_timing,
+            multitenant=dave_agent.multitenant,
+            mediation=dave_agent.mediation,
+            wallet_type=dave_agent.wallet_type,
+            aip=dave_agent.aip,
+            endorser_role=dave_agent.endorser_role,
         )
 
-        await alice_agent.initialize(the_agent=agent)
+        await dave_agent.initialize(the_agent=agent)
 
         #log_status("#9 Input faber.py invitation details")
-        #await input_invitation(alice_agent)
+        #await input_invitation(dave_agent)
 
         options = "    (3) Send Message\n" \
                 "    (3a) Get All Connections\n" \
@@ -153,12 +153,12 @@ async def main(args):
                 "    (6a) Twin SD\n" \
                 "    (6b) Untwin SD\n" \
                 "    (7) Sell SD\n"
-        if alice_agent.endorser_role and alice_agent.endorser_role == "author":
+        if dave_agent.endorser_role and dave_agent.endorser_role == "author":
             options += "    (D) Set Endorser's DID\n"
-        if alice_agent.multitenant:
+        if dave_agent.multitenant:
             options += "    (W) Create and/or Enable Wallet\n"
         options += "    (X) Exit?\n[3/4/{}X] ".format(
-            "W/" if alice_agent.multitenant else "",
+            "W/" if dave_agent.multitenant else "",
         )
         async for option in prompt_loop(options):
             if option is not None:
@@ -167,88 +167,88 @@ async def main(args):
             if option is None or option in "xX":
                 break
 
-            elif option in "dD" and alice_agent.endorser_role:
+            elif option in "dD" and dave_agent.endorser_role:
                 endorser_did = await prompt("Enter Endorser's DID: ")
-                await alice_agent.agent.admin_POST(
-                    f"/transactions/{alice_agent.agent.connection_id}/set-endorser-info",
+                await dave_agent.agent.admin_POST(
+                    f"/transactions/{dave_agent.agent.connection_id}/set-endorser-info",
                     params={"endorser_did": endorser_did, "endorser_name": "endorser"},
                 )
 
-            elif option in "wW" and alice_agent.multitenant:
+            elif option in "wW" and dave_agent.multitenant:
                 target_wallet_name = await prompt("Enter wallet name: ")
                 include_subwallet_webhook = await prompt(
                     "(Y/N) Create sub-wallet webhook target: "
                 )
                 if include_subwallet_webhook.lower() == "y":
-                    await alice_agent.agent.register_or_switch_wallet(
+                    await dave_agent.agent.register_or_switch_wallet(
                         target_wallet_name,
-                        webhook_port=alice_agent.agent.get_new_webhook_port(),
-                        mediator_agent=alice_agent.mediator_agent,
-                        taa_accept=alice_agent.taa_accept,
+                        webhook_port=dave_agent.agent.get_new_webhook_port(),
+                        mediator_agent=dave_agent.mediator_agent,
+                        taa_accept=dave_agent.taa_accept,
                     )
                 else:
-                    await alice_agent.agent.register_or_switch_wallet(
+                    await dave_agent.agent.register_or_switch_wallet(
                         target_wallet_name,
-                        mediator_agent=alice_agent.mediator_agent,
-                        taa_accept=alice_agent.taa_accept,
+                        mediator_agent=dave_agent.mediator_agent,
+                        taa_accept=dave_agent.taa_accept,
                     )
 
             elif option == "3":
                 msg = await prompt("Enter message: ")
                 if msg:
-                    await alice_agent.agent.admin_POST(
-                        f"/connections/{alice_agent.agent.connection_id}/send-message",
+                    await dave_agent.agent.admin_POST(
+                        f"/connections/{dave_agent.agent.connection_id}/send-message",
                         {"content": msg},
                     )
             elif option == "3a":
-                response = await alice_agent.agent.admin_GET(f"/connections")
+                response = await dave_agent.agent.admin_GET(f"/connections")
                 print(response)
             elif option == "4":
                 # handle new invitation
                 log_status("Input new invitation details")
-                await input_invitation(alice_agent)
+                await input_invitation(dave_agent)
             elif option == "5":
                 oempubdid = await prompt("Enter OEM PUB DID: ")
                 devuuid = await prompt("Enter Device UUID: ")
-                implicit_invitation = await alice_agent.agent.admin_POST(f"/didexchange/create-request?their_public_did={oempubdid}&use_public_did=false")
+                implicit_invitation = await dave_agent.agent.admin_POST(f"/didexchange/create-request?their_public_did={oempubdid}&use_public_did=false")
                 connectionid = implicit_invitation['connection_id']
-                alice_agent.agent.connection_id = connectionid
+                dave_agent.agent.connection_id = connectionid
                 time.sleep(1) 
-                await alice_agent.agent.admin_POST(
-                    f"/connections/{alice_agent.agent.connection_id}/send-message",
+                await dave_agent.agent.admin_POST(
+                    f"/connections/{dave_agent.agent.connection_id}/send-message",
                     {"content": devuuid},
                 )
             elif option == "5a":
                 # handle new invitation
                 log_status("Input GW QR Code")
-                await input_invitation(alice_agent)
+                await input_invitation(dave_agent)
             elif option == "5b":
                 # handle new invitation
                 log_status("Input GW QR Code to claim SD")
-                await input_invitation(alice_agent)
+                await input_invitation(dave_agent)
             elif option == "6a":
                 # handle new invitation
                 log_status("Input Twin Message")
                 devuuid = await prompt("Enter Device UUID: ")
-                data = await alice_agent.agent.admin_GET(f"/connections")
+                data = await dave_agent.agent.admin_GET(f"/connections")
                 print(data)
                 for connection in data['results']:
                     if connection['their_label'] == 'gateway.agent':
                         connection_id = connection['connection_id']
                         print(connection_id)
-                await alice_agent.agent.admin_POST(
+                await dave_agent.agent.admin_POST(
                     f"/connections/{connection_id}/send-message",
                     {"content": devuuid},
                 )
 
-        if alice_agent.show_timing:
-            timing = await alice_agent.agent.fetch_timing()
+        if dave_agent.show_timing:
+            timing = await dave_agent.agent.fetch_timing()
             if timing:
-                for line in alice_agent.agent.format_timing(timing):
+                for line in dave_agent.agent.format_timing(timing):
                     log_msg(line)
 
     finally:
-        terminated = await alice_agent.terminate()
+        terminated = await dave_agent.terminate()
 
     await asyncio.sleep(0.1)
 
