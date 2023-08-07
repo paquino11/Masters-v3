@@ -17,11 +17,9 @@ def remove_containers(container_names=None):
             docker_rm_cmd += f" {container_name}"
 
     try:
-        subprocess.run(docker_stop_cmd, shell=True, check=True)
+        subprocess.run(docker_stop_cmd + " && " + docker_rm_cmd, shell=True, check=True)
         print("All containers stopped successfully.")
 
-        #subprocess.run(docker_rm_cmd, shell=True, check=True)
-        #print("All containers removed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error while executing Docker command: {e}")
 
@@ -149,7 +147,7 @@ def deploy_aries_agents():
 
 def main():
     #REMOVE ALL DOCKER CONTAINERS
-    #remove_containers()
+    remove_containers()
 
     #DEPLOY FABRIC NETWORK
     result, elapsed_time = time_execution(deploy_fabric_network)
@@ -163,8 +161,8 @@ def main():
     #DEPLOY SMART DEVICE
     result, elapsed_time = time_execution(deploy_smartdevice)
 
-    containers_to_remove = ["consortium", "oem_egw", "oem_sd", "dave", "gatewayv2", "smartdevice", "alice", "bob", "charlie"]
-    remove_containers(containers_to_remove)
+    #containers_to_remove = ["consortium", "oem_egw", "oem_sd", "dave", "gatewayv2", "smartdevice", "alice", "bob", "charlie"]
+    #remove_containers(containers_to_remove)
 
     #DEPLOY ARIES AGENTS
     result, elapsed_time = time_execution(deploy_aries_agents)
