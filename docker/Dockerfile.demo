@@ -30,7 +30,7 @@ RUN pip3 install --no-cache-dir \
 ADD aries_cloudagent ./aries_cloudagent
 ADD bin ./bin
 ADD README.md ./
-ADD scripts ./scripts
+#ADD scripts ./scripts
 ADD setup.py ./
 
 RUN pip3 install --no-cache-dir -e .

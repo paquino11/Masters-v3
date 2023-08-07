@@ -20,8 +20,8 @@ def remove_containers(container_names=None):
         subprocess.run(docker_stop_cmd, shell=True, check=True)
         print("All containers stopped successfully.")
 
-        subprocess.run(docker_rm_cmd, shell=True, check=True)
-        print("All containers removed successfully.")
+        #subprocess.run(docker_rm_cmd, shell=True, check=True)
+        #print("All containers removed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error while executing Docker command: {e}")
 
@@ -163,8 +163,8 @@ def main():
     #DEPLOY SMART DEVICE
     result, elapsed_time = time_execution(deploy_smartdevice)
 
-    #containers_to_remove = ["consortium", "oem_egw", "oem_sd", "dave", "gatewayv2", "smartdevice", "alice", "bob", "charlie"]
-    #remove_containers(containers_to_remove)
+    containers_to_remove = ["consortium", "oem_egw", "oem_sd", "dave", "gatewayv2", "smartdevice", "alice", "bob", "charlie"]
+    remove_containers(containers_to_remove)
 
     #DEPLOY ARIES AGENTS
     result, elapsed_time = time_execution(deploy_aries_agents)
