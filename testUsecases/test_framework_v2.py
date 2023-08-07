@@ -5,17 +5,25 @@ import time
 import AgentsDeployment.deploy_agents as agents
 
 
-def remove_docker_containers():
-    print("Removing all docker containers")
+def remove_containers(container_names=None):
+    if container_names == None:
+        docker_stop_cmd = "docker stop $(docker ps -aq)"
+        docker_rm_cmd = "docker rm $(docker ps -aq)"
+
+    if container_names:
+        for container_name in container_names:
+            docker_stop_cmd += f" {container_name}"
+            docker_rm_cmd += f" {container_name}"
+
     try:
-        containers = subprocess.check_output(['docker', 'ps', '-a', '-q']).decode().strip().split('\n')
-        if not containers:
-            return
-        for container in containers:
-            stop_command = "docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)"
-            subprocess.run(stop_command, shell=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(docker_stop_cmd, shell=True, check=True)
+        print("All containers stopped successfully.")
+
+        subprocess.run(docker_rm_cmd, shell=True, check=True)
+        print("All containers removed successfully.")
     except subprocess.CalledProcessError as e:
-        print("")
+        print(f"Error while executing Docker command: {e}")
+
 
 def change_to_root_dir():
     current_dir = os.getcwd()
@@ -141,7 +149,7 @@ def deploy_aries_agents():
 
 def main():
     #REMOVE ALL DOCKER CONTAINERS
-    #remove_docker_containers()
+    #remove_containers()
 
     #DEPLOY FABRIC NETWORK
     result, elapsed_time = time_execution(deploy_fabric_network)
@@ -154,6 +162,9 @@ def main():
 
     #DEPLOY SMART DEVICE
     result, elapsed_time = time_execution(deploy_smartdevice)
+
+    containers_to_remove = ["consortium", "oem_egw", "oem_sd", "dave", "gatewayv2", "smartdevice", "alice", "bob", "charlie"]
+    remove_containers(containers_to_remove)
 
     #DEPLOY ARIES AGENTS
     result, elapsed_time = time_execution(deploy_aries_agents)
