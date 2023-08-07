@@ -4,6 +4,16 @@ import docker
 import time
 import AgentsDeployment.deploy_agents as agents
 
+import UseCases.uc1_oem_enroll_1 as uc1
+import UseCases.uc2_oem_enroll_2 as uc2
+import UseCases.uc3_dev_model_reg as uc3
+import UseCases.uc4_dev_self_reg as uc4
+import UseCases.uc5_consumer_buys_dev as uc5
+import UseCases.uc6_dev_claim as uc6
+import UseCases.uc7_dev_twin as uc7
+import UseCases.uc8_dev_untwin as uc8
+import UseCases.uc9_dev_sell as uc9
+
 
 def remove_containers(container_names=None):
     docker_stop_cmd="docker stop"
