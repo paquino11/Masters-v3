@@ -6,11 +6,12 @@ import AgentsDeployment.deploy_agents as agents
 
 
 def remove_containers(container_names=None):
+    docker_stop_cmd="docker stop"
+    docker_rm_cmd="docker rm"
     if container_names == None:
         docker_stop_cmd = "docker stop $(docker ps -aq)"
         docker_rm_cmd = "docker rm $(docker ps -aq)"
-
-    if container_names:
+    else:
         for container_name in container_names:
             docker_stop_cmd += f" {container_name}"
             docker_rm_cmd += f" {container_name}"
@@ -23,7 +24,6 @@ def remove_containers(container_names=None):
         print("All containers removed successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error while executing Docker command: {e}")
-
 
 def change_to_root_dir():
     current_dir = os.getcwd()
@@ -163,8 +163,8 @@ def main():
     #DEPLOY SMART DEVICE
     result, elapsed_time = time_execution(deploy_smartdevice)
 
-    containers_to_remove = ["consortium", "oem_egw", "oem_sd", "dave", "gatewayv2", "smartdevice", "alice", "bob", "charlie"]
-    remove_containers(containers_to_remove)
+    #containers_to_remove = ["consortium", "oem_egw", "oem_sd", "dave", "gatewayv2", "smartdevice", "alice", "bob", "charlie"]
+    #remove_containers(containers_to_remove)
 
     #DEPLOY ARIES AGENTS
     result, elapsed_time = time_execution(deploy_aries_agents)
