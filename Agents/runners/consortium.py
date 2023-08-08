@@ -65,6 +65,9 @@ class ConsortiumAgent(AriesAgent):
         # TODO define a dict to hold credential attributes
         # based on cred_def_id
         self.cred_attrs = {}
+        self.postgres=True
+
+
 
     async def detect_connection(self):
         await self._connection_ready

@@ -4,6 +4,8 @@ import test_framework_v2 as test
 def deploy_consortium():
     containers = ["consortium"]
     if not test.are_containers_deployed(containers):
+        command = "docker run -d --name consortium-postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5432:5432 postgres -c 'log_statement=all' -c 'logging_collector=on' -c 'log_destination=stderr'"
+        process = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         test.change_to_root_dir()
         print("Deploying Consortium Agent")
         os.chdir("Agents/")
@@ -45,6 +47,8 @@ def deploy_dave():
 def deploy_egw():
     containers = ["gatewayv2"]
     if not test.are_containers_deployed(containers):
+        command = "docker run -d --name gateway-postgres -e POSTGRES_PASSWORD=mysecretpassword -d -p 5433:5433 postgres -c 'log_statement=all' -c 'logging_collector=on' -c 'log_destination=stderr'"
+        process = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         test.change_to_root_dir()
         print("Deploying Edge Gateway Agent")
         os.chdir("Agents/")
