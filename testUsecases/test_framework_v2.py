@@ -128,7 +128,8 @@ def deploy_aries_agents():
     result, elapsed_time = time_execution(agents.deploy_consortium)
 
     #DEPLOY OEM EGW AGENT
-    result, elapsed_time = time_execution(agents.deploy_oem_egw)
+    #deployed in uc1_6
+    #result, elapsed_time = time_execution(agents.deploy_oem_egw)
 
     #DEPLOY OEM SD AGENT
     result, elapsed_time = time_execution(agents.deploy_oem_sd)
@@ -153,7 +154,18 @@ def deploy_aries_agents():
 
     print("Aries Agents Deployed")
 
+def run_use_cases():
+    uc1.main()
+    uc2.main()
+    uc3.main()
+    uc4.main()
+    uc5.main()
+    uc6.main()
+    uc7.main()
+    uc8.main()
+    uc9.main()
 
+    
 
 def main():
     #REMOVE ALL DOCKER CONTAINERS
@@ -177,6 +189,9 @@ def main():
     #DEPLOY ARIES AGENTS
     result, elapsed_time = time_execution(deploy_aries_agents)
     #result, elapsed_time = time_execution(agents.deploy_consortium)
+
+    #RUN USE CASES
+    run_use_cases()
 
 
 if __name__ == "__main__":

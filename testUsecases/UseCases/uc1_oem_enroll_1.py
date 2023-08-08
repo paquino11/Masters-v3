@@ -1,10 +1,14 @@
 import subprocess
 import os
+import time
 import sys
 import requests
 sys.path.append('/home/pedro/Desktop/Masters-v3/testUsecases/')  # Add the path to the directory containing test.py
 import test_framework_v2 as tfv2
 import AgentsDeployment.deploy_agents as agents
+import psycopg2
+from psycopg2 import sql
+from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 
 def step1():
     print("\nStep 1- Dave taps the “Enroll OEM” button on the consortium’s marketing website.")
@@ -32,7 +36,43 @@ def step2():
         
 def step3():
     print("\nStep 3- C:1 creates an UUID for the transaction and stores it in the “Transaction Table”.")
-    
+
+    dbname = "postgres"
+    user = "postgres"
+    password = "mysecretpassword"
+    host = "localhost"
+    port = "5432"
+
+    try:
+        connection = psycopg2.connect( dbname=dbname,user=user,password=password,host=host,port=port)
+        #print("Connection established successfully!")
+
+        connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+        cursor = connection.cursor()
+        create_table_query = sql.SQL("""
+            CREATE TABLE IF NOT EXISTS transaction_table (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                connection TEXT
+            )
+        """)
+        cursor.execute(create_table_query)
+        insert_query = sql.SQL("""
+            INSERT INTO transaction_table (connection)
+            VALUES (%s)
+        """)
+        connection_value = "Sample connection"
+        cursor.execute(insert_query, (connection_value,))
+        connection.commit()
+
+        cursor.close()
+
+    except psycopg2.Error as e:
+        print("Error:", e)
+
+    finally:
+        if connection:
+            connection.close()
+            #print("Connection closed.")
 
 def step4():
     print("\nStep 4- C:1 creates the OOB and the goal code c2dt.consortium.enroll.OEM?UUID.")
@@ -59,7 +99,7 @@ def step5():
 
 def step6():
     print("\nStep 6- The OEM staff deploys the DIDComm and starts it up.")
-    agents.deploy_oem_egw
+    agents.deploy_oem_egw()
 
 def step7():
     print("\nStep 7- During the first boot O:1 creates its public DID.")
@@ -104,6 +144,42 @@ def step9(invitation):
 
 def step10():
     print("\nStep 10- The Consortium’s DIDComm Agent (C:1) identifies the goal code UUID and recognizes that it refers to the ongoing OEM enrollment and creates a new entry into the Agent Table. ")
+    dbname = "postgres"
+    user = "postgres"
+    password = "mysecretpassword"
+    host = "localhost"
+    port = "5432"
+
+    try:
+        connection = psycopg2.connect( dbname=dbname,user=user,password=password,host=host,port=port)
+        #print("Connection established successfully!")
+
+        connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+        cursor = connection.cursor()
+        create_table_query = sql.SQL("""
+            CREATE TABLE IF NOT EXISTS agent_table (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                agent TEXT
+            )
+        """)
+        cursor.execute(create_table_query)
+        insert_query = sql.SQL("""
+            INSERT INTO agent_table (agent)
+            VALUES (%s)
+        """)
+        connection_value = "OEM_EGW"
+        cursor.execute(insert_query, (connection_value,))
+        connection.commit()
+
+        cursor.close()
+
+    except psycopg2.Error as e:
+        print("Error:", e)
+
+    finally:
+        if connection:
+            connection.close()
+            #print("Connection closed.")
 
 def step11():
     print("\nStep 11- D:1 establishes a connection with O:1 using an implicit invitation which is known to Dave because he has access to the O:1")
@@ -142,12 +218,12 @@ def main():
     response = tfv2.time_execution(step4)
     tfv2.time_execution(step5)
     tfv2.time_execution(step6)
+    time.sleep(10)
     tfv2.time_execution(step7)
     tfv2.time_execution(step8)
     tfv2.time_execution(step9, response[0])
     tfv2.time_execution(step10)
     tfv2.time_execution(step11)
-
 
 
 if __name__ == "__main__":
