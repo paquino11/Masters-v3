@@ -155,8 +155,9 @@ def deploy_aries_agents():
     print("Aries Agents Deployed")
 
 def run_use_cases():
-    uc1.main()
-    uc2.main()
+    dave_inv = uc1.main()
+    time.sleep(2)
+    uc2.main(dave_inv[0]['connection_id'])
     uc3.main()
     uc4.main()
     uc5.main()
@@ -183,8 +184,8 @@ def main():
     #DEPLOY SMART DEVICE
     #result, elapsed_time = time_execution(deploy_smartdevice)
 
-    containers_to_remove = ["consortium", "consortium-postgres", "oem_egw", "oem_sd", "dave", "gatewayv2", "gateway-postgres", "smartdevice", "alice", "bob", "charlie"]
-    remove_containers(containers_to_remove)
+    #containers_to_remove = ["consortium", "consortium-postgres", "oem_egw", "oem_sd", "dave", "gatewayv2", "gateway-postgres", "smartdevice", "alice", "bob", "charlie"]
+    #remove_containers(containers_to_remove)
 
     #DEPLOY ARIES AGENTS
     result, elapsed_time = time_execution(deploy_aries_agents)

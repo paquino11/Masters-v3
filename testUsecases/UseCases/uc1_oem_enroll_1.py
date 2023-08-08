@@ -223,8 +223,10 @@ def main():
     tfv2.time_execution(step8)
     tfv2.time_execution(step9, response[0])
     tfv2.time_execution(step10)
-    tfv2.time_execution(step11)
+    dave_inv = tfv2.time_execution(step11)
+    print(dave_inv)
 
+    return dave_inv
 
 if __name__ == "__main__":
     main()
