@@ -2,6 +2,82 @@ import requests
 import psycopg2
 from psycopg2 import sql
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+import sys
+sys.path.append('/home/pedro/Desktop/Masters-v3/testUsecases/')  # Add the path to the directory containing test.py
+import test_framework_v2 as tfv2
+import datetime
+import time
+
+
+CRED_FORMAT_INDY = "indy"
+CRED_PREVIEW_TYPE = "https://didcomm.org/issue-credential/2.0/credential-preview"
+
+def generate_credential_offer(self, aip, cred_type, cred_def_id, exchange_tracing):
+    age = 24
+    d = datetime.date.today()
+    birth_date = datetime.date(d.year - age, d.month, d.day)
+    birth_date_format = "%Y%m%d"
+    if aip == 10:
+        # define attributes to send for credential
+        self.cred_attrs[cred_def_id] = {
+            "name": "Alice Smith",
+            "date": "2018-05-28",
+            "degree": "Maths",
+            "birthdate_dateint": birth_date.strftime(birth_date_format),
+            "timestamp": str(int(time.time())),
+        }
+
+        cred_preview = {
+            "@type": CRED_PREVIEW_TYPE,
+            "attributes": [
+                {"name": n, "value": v}
+                for (n, v) in self.cred_attrs[cred_def_id].items()
+            ],
+        }
+        offer_request = {
+            "connection_id": self.connection_id,
+            "cred_def_id": cred_def_id,
+            "comment": f"Offer on cred def id {cred_def_id}",
+            "auto_remove": False,
+            "credential_preview": cred_preview,
+            "trace": exchange_tracing,
+        }
+        return offer_request
+
+    elif aip == 20:
+        if cred_type == CRED_FORMAT_INDY:
+            self.cred_attrs[cred_def_id] = {
+                "name": "Alice Smith",
+                "date": "2018-05-28",
+                "degree": "Maths",
+                "birthdate_dateint": birth_date.strftime(birth_date_format),
+                "timestamp": str(int(time.time())),
+            }
+
+            cred_preview = {
+                "@type": CRED_PREVIEW_TYPE,
+                "attributes": [
+                    {"name": n, "value": v}
+                    for (n, v) in self.cred_attrs[cred_def_id].items()
+                ],
+            }
+            offer_request = {
+                "connection_id": self.connection_id,
+                "comment": f"Offer on cred def id {cred_def_id}",
+                "auto_remove": False,
+                "credential_preview": cred_preview,
+                "filter": {"indy": {"cred_def_id": cred_def_id}},
+                "trace": exchange_tracing,
+            }
+            return offer_request
+
+
+        else:
+            raise Exception(f"Error invalid credential type: {self.cred_type}")
+
+    else:
+        raise Exception(f"Error invalid AIP level: {self.aip}")
+
 
 def step1(dave_inv):
     print("\nStep 1- D:1 makes an introduction using Aries RFC0028 to O:1 passing the OOB along with goal code. ")
@@ -97,12 +173,19 @@ def step3():
 
 def step4():
     print("\nStep 4- C:1 proposes O:1 the Enrollment VC which defines the proofs (e.g., documents) O:1 must submit so C:1 can assess the OEM trustworthiness. ")
-
+    offer_request = generate_credential_offer(
+                                20,
+                                CRED_FORMAT_INDY,
+                                "",
+                                False,
+                            )
+    
 def step5():
     print("\nStep 5- O:1 provides the proofs to C:1. ")
 
 def step6():
     print("\nStep 6- Upon validating the submitted proofs, C:1 sends a message to O:1 to generate its ecosystem ledger credentials. ")
+
 
 def step7():
     print("\nStep 7- O:1 requests the consortium a X.509 certificate. ")
@@ -118,16 +201,16 @@ def step10():
 
 
 def main(dave_inv):
-    cons_pub_did = step1(dave_inv)
-    step2(cons_pub_did)
-    step3()
-    step4()
-    step5()
-    step6()
-    step7()
-    step8()
-    step9()
-    step10()
+    cons_pub_did = tfv2.time_execution(step1, dave_inv)
+    tfv2.time_execution(step2, cons_pub_did)
+    tfv2.time_execution(step3)
+    tfv2.time_execution(step4)
+    tfv2.time_execution(step5)
+    tfv2.time_execution(step6)
+    tfv2.time_execution(step7)
+    tfv2.time_execution(step8)
+    tfv2.time_execution(step9)
+    tfv2.time_execution(step10)
 
 
 if __name__ == "__main__":

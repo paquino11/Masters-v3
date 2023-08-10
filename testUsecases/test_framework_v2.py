@@ -170,22 +170,22 @@ def run_use_cases():
 
 def main():
     #REMOVE ALL DOCKER CONTAINERS
-    #remove_containers()
+    remove_containers()
 
     #DEPLOY FABRIC NETWORK
-    #result, elapsed_time = time_execution(deploy_fabric_network)
+    result, elapsed_time = time_execution(deploy_fabric_network)
   
     #DEPLOY IPFS Node
-    #result, elapsed_time = time_execution(deploy_ipfs_node)
+    result, elapsed_time = time_execution(deploy_ipfs_node)
 
     #DEPLOY GATEWAY
-    #result, elapsed_time = time_execution(deploy_gateway)
+    result, elapsed_time = time_execution(deploy_gateway)
 
     #DEPLOY SMART DEVICE
-    #result, elapsed_time = time_execution(deploy_smartdevice)
+    result, elapsed_time = time_execution(deploy_smartdevice)
 
-    #containers_to_remove = ["consortium", "consortium-postgres", "oem_egw", "oem_sd", "dave", "gatewayv2", "gateway-postgres", "smartdevice", "alice", "bob", "charlie"]
-    #remove_containers(containers_to_remove)
+    containers_to_remove = ["consortium", "consortium-postgres", "oem_egw", "oem_sd", "dave", "gatewayv2", "gateway-postgres", "smartdevice", "alice", "bob", "charlie"]
+    remove_containers(containers_to_remove)
 
     #DEPLOY ARIES AGENTS
     result, elapsed_time = time_execution(deploy_aries_agents)

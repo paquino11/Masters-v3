@@ -1,8 +1,8 @@
 REQUISITES:
 
 vim
-jq 
-golang-go
+sudo apt-get install jq 
+sudo apt-get install golang-go
 docker
 sudo apt-get install git curl docker-compose -y
 ./install-fabric.sh d b
