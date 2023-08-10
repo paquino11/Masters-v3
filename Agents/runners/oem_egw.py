@@ -1021,10 +1021,16 @@ async def main(args):
         print(oem_agent.agent.lastmessage)
         last_message = "First"
         oem_agent.agent.lastmessage = ""
-        while stop != True:
-            n_connections, last_result, response, newconnect = await check_for_new_connection(n_connections, last_result)
+        async for option in prompt_loop(options):
+            if option is not None:
+                option = option.strip()
 
-            last_message = await check_for_new_message(last_message, last_result)
+            if option is None or option in "xX":
+                break  
+        #while stop != True:
+            #n_connections, last_result, response, newconnect = await check_for_new_connection(n_connections, last_result)
+
+            #last_message = await check_for_new_message(last_message, last_result)
 
    
         if oem_agent.show_timing:
