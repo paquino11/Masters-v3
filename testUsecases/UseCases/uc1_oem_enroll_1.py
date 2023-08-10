@@ -3,7 +3,7 @@ import os
 import time
 import sys
 import requests
-sys.path.append('/home/pedro/Desktop/Masters-v3/testUsecases/')  # Add the path to the directory containing test.py
+sys.path.append('/home/pedro/Desktop/Masters-v3/testUsecases/') 
 import test_framework_v2 as tfv2
 import AgentsDeployment.deploy_agents as agents
 import psycopg2

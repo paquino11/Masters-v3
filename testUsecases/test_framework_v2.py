@@ -12,7 +12,6 @@ import UseCases.uc5_consumer_buys_dev as uc5
 import UseCases.uc6_dev_claim as uc6
 import UseCases.uc7_dev_twin as uc7
 import UseCases.uc8_dev_untwin as uc8
-import UseCases.uc9_dev_sell as uc9
 
 
 def remove_containers(container_names=None):
@@ -164,13 +163,12 @@ def run_use_cases():
     uc6.main()
     uc7.main()
     uc8.main()
-    uc9.main()
 
     
 
 def main():
     #REMOVE ALL DOCKER CONTAINERS
-    remove_containers()
+    #remove_containers()
 
     #DEPLOY FABRIC NETWORK
     result, elapsed_time = time_execution(deploy_fabric_network)

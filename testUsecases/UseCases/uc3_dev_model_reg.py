@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/home/pedro/Desktop/Masters-v3/testUsecases/')  # Add the path to the directory containing test.py
+sys.path.append('/home/pedro/Desktop/Masters-v3/testUsecases/')
 import test_framework_v2 as tfv2
 
 
@@ -21,10 +21,6 @@ def step5():
 
 def step6():
     print("Step 6- C:1 uses Aries RFC 009523 to send the deviceModelID along with DeviceName to O:1. ")
-
-
-
-
 
 
 def main():
