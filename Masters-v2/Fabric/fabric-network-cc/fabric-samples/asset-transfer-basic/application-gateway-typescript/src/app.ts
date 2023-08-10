@@ -90,6 +90,14 @@ async function main(): Promise<void> {
             await AgentRegistration(contract);
             res.sendStatus(200);
           });
+
+          app.post('/regdevmodel', async (req: Request, res: Response) => {
+            //const receivedString = req.body.string;
+            //console.log(`Received ipfs hash from client: ${receivedString}`);
+            await DeviceModelRegistration(contract);
+            res.sendStatus(200);
+          });
+
           
           
         app.listen(3025, () => {
@@ -171,6 +179,17 @@ async function AgentRegistration(contract: Contract): Promise<void> {
     console.log('*** Transaction committed successfully');
 }
 
+async function DeviceModelRegistration(contract: Contract): Promise<void> {
+    console.log('\n--> Submit Transaction: DeviceModelRegistration, creates new Aries Agent on Fabric');
+
+    await contract.submitTransaction(
+        'DeviceModelRegistration',
+        'devmodel',
+        'super device model'
+    );
+
+    console.log('*** Transaction committed successfully');
+}
 
 
 /**

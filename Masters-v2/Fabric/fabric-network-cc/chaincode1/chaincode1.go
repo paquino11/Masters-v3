@@ -386,6 +386,36 @@ func (s *SmartContract) GetAllDeviceModels(ctx contractapi.TransactionContextInt
 	return devicemodels, nil
 }
 
+func (s *SmartContract) DeviceModelExists(ctx contractapi.TransactionContextInterface, devmodelid string) (bool, error) {
+	assetJSON, err := ctx.GetStub().GetState(devmodelid)
+	if err != nil {
+		return false, fmt.Errorf("failed to read from world state: %v", err)
+	}
+	return assetJSON != nil, nil
+}
+
+func (s *SmartContract) DeviceModelRegistration(ctx contractapi.TransactionContextInterface, devmodelid string, description string) error {
+	exists, err := s.DeviceModelExists(ctx, devmodelid)
+	if err != nil {
+		return err
+	}
+	if exists {
+		return fmt.Errorf("the aries agent %s already exists", devmodelid)
+	}
+
+	devmodel := DeviceModel{
+		DeviceModelID: devmodelid,
+		Description:   description,
+		Features:      []string{"feature1"},
+		Images:        []string{"image1"},
+	}
+	assetJSON, err := json.Marshal(devmodel)
+	if err != nil {
+		return err
+	}
+	return ctx.GetStub().PutState(devmodelid, assetJSON)
+}
+
 //DEVICE FUNCTIONS
 func (s *SmartContract) DeviceExists(ctx contractapi.TransactionContextInterface, deviceid string) (bool, error) {
 	assetJSON, err := ctx.GetStub().GetState(deviceid)

@@ -113,7 +113,7 @@ def step9(invitation):
     invitation_id = invitation['invitation']['@id']
     service_endpoint = invitation['invitation']['services'][0]['serviceEndpoint']
 
-    url = 'http://0.0.0.0:8201/out-of-band/receive-invitation?auto_accept=true&use_existing_connection=false'    
+    url = 'http://0.0.0.0:8201/out-of-band/receive-invitation?auto_accept=true&use_existing_connection=false&alias=consortium'    
 
     headers = { 'Accept': 'application/json', 'Content-Type': 'application/json' }
 
