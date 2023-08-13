@@ -82,21 +82,21 @@ async function main(): Promise<void> {
             console.log(`Received ipfs hash from client: ${receivedString}`);
             await BatchRegistration(contract, receivedString);
             res.sendStatus(200);
-          });
+        });
 
-          app.post('/regariesagent', async (req: Request, res: Response) => {
+        app.post('/regariesagent', async (req: Request, res: Response) => {
             //const receivedString = req.body.string;
             //console.log(`Received ipfs hash from client: ${receivedString}`);
             await AgentRegistration(contract);
             res.sendStatus(200);
-          });
+        });
 
-          app.post('/regdevmodel', async (req: Request, res: Response) => {
-            //const receivedString = req.body.string;
-            //console.log(`Received ipfs hash from client: ${receivedString}`);
+        app.post('/regdevmodel', async (req: Request, res: Response) => {
+            const receivedString = req.body.string;
+            console.log(`Received ipfs hash from client: ${receivedString}`);
             await DeviceModelRegistration(contract);
             res.sendStatus(200);
-          });
+        });
 
           
           

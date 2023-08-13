@@ -48,8 +48,9 @@ def step2():
 
 def step3():
     print("Step 3- C:1 generates a DeviceModelID and anchors the information into DT Ledger. ")
-    url = "http://fabric-gateway:3025/regdevmodel"
-    response = requests.post(url)
+    url = "http://localhost:3025/regdevmodel"
+    payload = {"string": "devmodel"}
+    response = requests.post(url, json=payload)
     
     if response.status_code == 200:
         print("Hash sent successfully to Fabric!")

@@ -13,6 +13,7 @@ import UseCases.uc6_dev_claim as uc6
 import UseCases.uc7_dev_twin as uc7
 import UseCases.uc8_dev_untwin as uc8
 #import UseCases.run_all_uc as run_all
+import psutil
 
 
 def remove_containers(container_names=None):
@@ -74,6 +75,10 @@ def time_execution(func, *args, **kwargs):
     print("Time taken: {:.3f} seconds".format(elapsed_time))
     return result, elapsed_time
 
+def get_resource_usage():
+    cpu_percent = psutil.cpu_percent(interval=0.1)
+    ram_percent = psutil.virtual_memory().percent
+    return cpu_percent, ram_percent
 
 def deploy_fabric_network():
     containers = ["ca_orderer"]
@@ -121,8 +126,6 @@ def deploy_smartdevice():
         process = subprocess.call(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     print("Smart Device deployed")    
 
-
-
 def deploy_aries_agents():
     #DEPLOY CONSORTIUM AGENT
     result, elapsed_time = time_execution(agents.deploy_consortium)
@@ -153,6 +156,7 @@ def deploy_aries_agents():
     result, elapsed_time = time_execution(agents.deploy_charlie)
 
     print("Aries Agents Deployed")
+
 
 def run_use_cases():
     print("UC1: \n")
@@ -201,7 +205,7 @@ def main():
     #remove_containers(containers_to_remove)
 
     #DEPLOY ARIES AGENTS
-    #result, elapsed_time = time_execution(deploy_aries_agents)
+    result, elapsed_time = time_execution(deploy_aries_agents)
     #result, elapsed_time = time_execution(agents.deploy_consortium)
 
     #RUN USE CASES
@@ -210,3 +214,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

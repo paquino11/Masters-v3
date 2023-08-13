@@ -10,12 +10,12 @@ import uc8_dev_untwin as uc8
 import time
 
 def main():
-    #print("UC1: \n")
-    #dave_inv = uc1.main()
-    #time.sleep(2)
-    #print("UC2: \n")
-    #uc2.main(dave_inv[0]['connection_id'])
-    #time.sleep(2)
+    print("UC1: \n")
+    dave_inv = uc1.main()
+    time.sleep(2)
+    print("UC2: \n")
+    uc2.main(dave_inv[0]['connection_id'])
+    time.sleep(2)
     print("UC3: \n")
     uc3.main()
     time.sleep(2)

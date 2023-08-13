@@ -9,6 +9,8 @@ import AgentsDeployment.deploy_agents as agents
 import psycopg2
 from psycopg2 import sql
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+import matplotlib.pyplot as plt
+import numpy as np
 
 def step1():
     print("\nStep 1- Dave taps the “Enroll OEM” button on the consortium’s marketing website.")
@@ -211,7 +213,7 @@ def step11():
         return response.status_code
 
 
-def main():
+"""def main():
     tfv2.time_execution(step1)
     tfv2.time_execution(step2)
     tfv2.time_execution(step3)
@@ -226,7 +228,44 @@ def main():
     dave_inv = tfv2.time_execution(step11)
     print(dave_inv)
 
-    return dave_inv
+    return dave_inv"""
+
+def main():
+    execution_times = []
+    cpu_usage = []
+    ram_usage = []
+
+    for step in [step1, step2, step3, step4, step5, step6, step7, step8, step9, step10, step11]:
+        response, exe_time = tfv2.time_execution(step)
+
+        execution_times.append(exe_time)
+        cpu_percent, ram_percent = tfv2.get_resource_usage()
+        cpu_usage.append(cpu_percent)
+        ram_usage.append(ram_percent)
+
+    # Create Gantt chart
+    plt.figure(figsize=(10, 6))
+    plt.barh(range(len(execution_times)), execution_times, color='blue')
+    plt.yticks(range(len(execution_times)), ["Step {}".format(i+1) for i in range(len(execution_times))])
+    plt.xlabel('Execution Time')
+    plt.ylabel('Steps')
+    plt.title('Execution Time Gantt Chart')
+    plt.tight_layout()
+
+    # Plot CPU and RAM usage
+    plt.figure(figsize=(10, 6))
+    plt.plot(cpu_usage, label='CPU Usage')
+    plt.plot(ram_usage, label='RAM Usage')
+    plt.xlabel('Steps')
+    plt.ylabel('Usage (%)')
+    plt.title('Resource Usage Over Steps')
+    plt.legend()
+    plt.tight_layout()
+
+    plt.show()
+
+    return response
+
 
 if __name__ == "__main__":
     main()
