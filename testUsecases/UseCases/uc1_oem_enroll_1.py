@@ -17,7 +17,7 @@ def step1():
 
 def step2():
     print("\nStep 2- The marketing website makes a call to C:1 Admin API to requests an OOB URI.")
-    url = 'http://0.0.0.0:8181/out-of-band/create-invitation'
+    url = 'http://194.210.86.20:8181/out-of-band/create-invitation'
     params = { 'auto_accept': 'true', 'multi_use': 'false' }
 
     headers = { 'Accept': 'application/json', 'Content-Type': 'application/json' }
