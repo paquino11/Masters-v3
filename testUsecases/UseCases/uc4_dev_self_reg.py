@@ -101,7 +101,7 @@ def step5_1():
                 enrollment_vc_id = cred_id
                 break
         if enrollment_vc_id:
-            print("Enrollment VC ID:", enrollment_vc_id)
+            #print("Enrollment VC ID:", enrollment_vc_id)
             print("")
         else:
             print("No Enrollment VC ID found.")
@@ -150,7 +150,7 @@ def step5_1():
 
     if response.status_code == 200:
         response_data = response.json()
-        print("it was proposed")
+        #print("it was proposed")
         return connection_id
     else:
         #print(f"Request failed with status code: {response.status_code}")
@@ -283,7 +283,7 @@ def step5_2():
                 enrollment_vc_id = cred_id
                 break
         if enrollment_vc_id:
-            print("Enrollment VC ID:", enrollment_vc_id)
+            #print("Enrollment VC ID:", enrollment_vc_id)
             print("")
         else:
             print("No Enrollment VC ID found.")
@@ -332,7 +332,7 @@ def step5_2():
 
     if response.status_code == 200:
         response_data = response.json()
-        print("it was proposed")
+        #print("it was proposed")
         return connection_id
     else:
         #print(f"Request failed with status code: {response.status_code}")
@@ -386,7 +386,7 @@ def step8_2():
                 enrollment_vc_id = cred_id
                 break
         if enrollment_vc_id:
-            print("Enrollment VC ID:", enrollment_vc_id)
+            #print("Enrollment VC ID:", enrollment_vc_id)
             print("")
         else:
             print("No Enrollment VC ID found.")
@@ -435,7 +435,7 @@ def step8_2():
 
     if response.status_code == 200:
         response_data = response.json()
-        print("it was proposed")
+        #print("it was proposed")
         return connection_id
     else:
         #print(f"Request failed with status code: {response.status_code}")
