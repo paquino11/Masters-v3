@@ -162,10 +162,10 @@ def deploy_aries_agents():
 
 def run_use_cases():
     print("UC1: \n")
-    dave_inv = uc1.main()
+    uc1.main()
     time.sleep(2)
-    print("UC2: \n")
-    uc2.main(dave_inv[0]['connection_id'])
+    print("UC2: ")
+    uc2.main()
     time.sleep(2)
     print("UC3: \n")
     uc3.main()

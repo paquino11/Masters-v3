@@ -14,7 +14,7 @@ CRED_FORMAT_INDY = "indy"
 CRED_PREVIEW_TYPE = "https://didcomm.org/issue-credential/2.0/credential-preview"
 
 
-def step1(dave_inv):
+def step1():
     print("\nStep 1- D:1 makes an introduction using Aries RFC0028 to O:1 passing the OOB along with goal code. ")
     #get consortium pub did
     url = 'http://0.0.0.0:8181/wallet/did/public'
@@ -27,8 +27,22 @@ def step1(dave_inv):
     else:
         return response.status_code
     
+
+    url = 'http://0.0.0.0:8201/connections?alias=oem_egw'
+    headers = {'accept': 'application/json'}
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        data = response.json()
+        print(data)
+    else:
+        print(f"Request failed with status code {response.status_code}")
+
+    first_result = data["results"][0]
+    dave_connection_id = first_result["connection_id"]
     #send consortium pub did from dave to oem egw
-    url = f'http://0.0.0.0:8201/connections/{dave_inv}/send-message'
+    url = f'http://0.0.0.0:8201/connections/{dave_connection_id}/send-message'
     headers = {'accept': 'application/json','Content-Type': 'application/json'}
     data = {"content": pub_did}
     response = requests.post(url, headers=headers, json=data)
@@ -192,8 +206,8 @@ def step4():
         print("it was proposed")
         return connection_id
     else:
-        print(f"Request failed with status code: {response.status_code}")
-    
+        #print(f"Request failed with status code: {response.status_code}")
+        print("")
 def step5():
     print("\nStep 5- O:1 provides the proofs to C:1. ")
 
@@ -330,11 +344,11 @@ def step10():
         response_data = response.json()
         #print(response_data)
     else:
-        print(f"Request failed with status code: {response.status_code}")
+        #print(f"Request failed with status code: {response.status_code}")
+        print("")
 
-
-def main(dave_inv):
-    cons_pub_did = tfv2.time_execution(step1, dave_inv)
+def main():
+    cons_pub_did = tfv2.time_execution(step1)
     tfv2.time_execution(step2, cons_pub_did)
     tfv2.time_execution(step3)
     connect = tfv2.time_execution(step4)

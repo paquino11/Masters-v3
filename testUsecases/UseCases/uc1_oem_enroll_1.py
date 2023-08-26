@@ -17,7 +17,7 @@ def step1():
 
 def step2():
     print("\nStep 2- The marketing website makes a call to C:1 Admin API to requests an OOB URI.")
-    url = 'http://194.210.86.20:8181/out-of-band/create-invitation'
+    url = 'http://0.0.0.0:8181/out-of-band/create-invitation'
     params = { 'auto_accept': 'true', 'multi_use': 'false' }
 
     headers = { 'Accept': 'application/json', 'Content-Type': 'application/json' }
@@ -34,7 +34,7 @@ def step2():
     else:
         #print("Request failed with status code:", response.status_code)
         #print("Response content:", response.text)
-        return response.text
+        print("error")
         
 def step3():
     print("\nStep 3- C:1 creates an UUID for the transaction and stores it in the “Transaction Table”.")
@@ -70,6 +70,7 @@ def step3():
 
     except psycopg2.Error as e:
         print("Error:", e)
+        print("error")
 
     finally:
         if connection:
@@ -94,7 +95,8 @@ def step4():
     else:
         #print("Request failed with status code:", response.status_code)
         #print("Response content:", response.text)
-        return response.text
+        #return response.text
+        print("error")
 
 def step5():
     print("\nStep 5- The marketing website redirects Dave to a new page that contains the OOB URI along with the instructions to deploy the OEM’s DIDComm Agent (O:1).")
@@ -142,7 +144,8 @@ def step9(invitation):
     else:
         #print("Request failed with status code:", response.status_code)
         #print("Response content:", response.text)
-        return response.text
+        #return response.text
+        print("error")
 
 def step10():
     print("\nStep 10- The Consortium’s DIDComm Agent (C:1) identifies the goal code UUID and recognizes that it refers to the ongoing OEM enrollment and creates a new entry into the Agent Table. ")
@@ -177,6 +180,7 @@ def step10():
 
     except psycopg2.Error as e:
         print("Error:", e)
+        print("error")
 
     finally:
         if connection:
@@ -191,21 +195,23 @@ def step11():
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         response_data = response.json()
-        #print(response_data)
+        print(response_data)
         pub_did = response_data["result"]["did"]
     else:
+        print("error")
         return response.status_code
         #print("Request failed with status code:", response.status_code)
         #print("Response content:", response.text)
     #Implicit invitation from dave to oem egw
     url = 'http://0.0.0.0:8201/didexchange/create-request'
-    params = { 'their_public_did': pub_did }
+    params = { 'their_public_did': pub_did, 'alias': "oem_egw", 'my_label': "dave" }
     headers = { 'accept': 'application/json' }
 
     response = requests.post(url, params=params, headers=headers)
 
     if response.status_code == 200:
         response_data = response.json()
+        print(response_data)
         return response_data
     else:
         #print("Request failed with status code:", response.status_code)
@@ -301,7 +307,7 @@ def main():
     # Show the combined plot
     plt.show()
 
-    return r11
+    #return r11
 
 
 

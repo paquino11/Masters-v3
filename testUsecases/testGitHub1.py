@@ -2,12 +2,8 @@ import requests
 import base64
 import time
 
-GREEN = '\033[1;32m'
-RESET = '\033[0m'
 
-total_start_time = time.time()
-# Set your GitHub access token
-access_token = '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'
+access_token = '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'
 
 # Set the repository details
 owner = 'paquino11'
@@ -17,14 +13,19 @@ repo = 'wot_files'
 branch = 'main'  # Replace with the desired branch name
 
 # Set the file details
-file_path = 'home/pedro/Desktop/Aries-Agents/testUsecases/wotfile.txt'
-file_path1 = '/home/pedro/Desktop/Aries-Agents/testUsecases/wotfile.txt'
+file_path = 'home/pedro/Desktop/Masters-v3/testUsecases/wotfile.txt'
+file_path1 = '/home/pedro/Desktop/Masters-v3/testUsecases/wotfile.txt'
 # Read the content of the file
 with open(file_path1, 'r') as file:
     file_content = file.read()
 
-# Set the API endpoint URL
-url = f'https://api.github.com/repos/{owner}/{repo}/contents/wotfile4.txt'
+import datetime
+
+current_timestamp = str(datetime.datetime.now())
+
+print(current_timestamp)
+
+url = f'https://api.github.com/repos/{owner}/{repo}/contents/wotfile{current_timestamp}.txt'
 
 # Set the headers
 headers = {
@@ -51,6 +52,3 @@ if response.status_code == 201:
 else:
     print(f'Failed to add file. Status code: {response.status_code}, Error message: {response.json()["message"]}')
 
-total_end_time = time.time()
-total_execution_time = round(total_end_time - total_start_time, 3)
-print(f"{GREEN}\t{total_execution_time}\n{RESET}")
