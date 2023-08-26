@@ -1,4 +1,4 @@
-import sys
+import sys, os
 sys.path.append('/home/pedro/Desktop/Masters-v3/testUsecases/')
 import test_framework_v2 as tfv2
 import requests
@@ -69,6 +69,8 @@ def step4():
     branch = 'main'  # Replace with the desired branch name
 
     # Set the file details
+    tfv2.change_to_root_dir()
+    os.chdir("testUsecases")
     file_path1 = 'wotfile.txt'
     # Read the content of the file
     with open(file_path1, 'r') as file:

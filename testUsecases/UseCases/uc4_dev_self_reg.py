@@ -16,6 +16,7 @@ def step1_1():
 def step2_1():
     print("Step 2- During first boot, the EGW executes a script that boots egw:1.  ")
     agents.deploy_egw()
+    time.sleep(10)
 
 def step3_1():
     print("Step 3- egw:1 creates the public DID. ")
