@@ -69,8 +69,7 @@ def step4():
     branch = 'main'  # Replace with the desired branch name
 
     # Set the file details
-    file_path = 'home/pedro/Desktop/Masters-v3/testUsecases/wotfile.txt'
-    file_path1 = '/home/pedro/Desktop/Masters-v3/testUsecases/wotfile.txt'
+    file_path1 = 'wotfile.txt'
     # Read the content of the file
     with open(file_path1, 'r') as file:
         file_content = file.read()
