@@ -4,6 +4,7 @@ import test_framework_v2 as tfv2
 import psycopg2
 from psycopg2 import sql
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+import test_framework_v2 as tfv2
 
 
 def step1():
@@ -104,7 +105,7 @@ def step5():
 
     # Set the branch and file path you want to download
     branch = 'main'  # Replace with the desired branch name
-    file_path = 'wotfile.txt'  # Replace with the desired file path
+    file_path = 'wotfile1.txt'  # Replace with the desired file path
 
     # Set the API endpoint URL
     url = f'https://api.github.com/repos/{owner}/{repo}/contents/{file_path}?ref={branch}'
@@ -132,16 +133,60 @@ def step5():
 
 def step6():
     print("Step 6- egw:1 starts DT server and deploys the SD DT using the WoT file. ")
+ #init gateway
+    result, elapsed_time = tfv2.time_execution(tfv2.deploy_gateway)
 
 def step7():
     print("Step 7- egw:1 sends a message to sd:1 to start streaming data which includes the MQTT topic. ")
+    url = 'http://localhost:8181/connections'
+    headers = {'accept': 'application/json'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        connection_id = None
+        
+        for result in data.get('results', []):
+            if result.get('their_label') == 'oem.egw.agent':
+                connection_id = result.get('connection_id')
+                break  # Stop searching once the desired connection is found
+        
+        if connection_id:
+            print(f"Connection ID for 'oem.egw.agent': {connection_id}")
+        else:
+            print("No connection found for 'oem.egw.agent'")
+    else:
+        print(f"Request failed with status code: {response.status_code}")
+
+    base_url = 'http://localhost:8081/connections/'
+
+    url = f'{base_url}{connection_id}/send-message'
+
+    headers = {
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+
+    data = {
+        "content": "start streaming data"
+    }
+
+    response = requests.post(url, headers=headers, json=data)
 
 def step8():
     print("Step 8- sd:1 needs to configure the MQTT Client.  ")
+    result, elapsed_time = tfv2.time_execution(tfv2.deploy_smartdevice)
+
 
 def step9():
     print("Step 9- egw:1 updates the state of the SD to “Twined”. ")
-
+    url = "http://localhost:3025/regdataset"
+    payload = {"string": "twinned"}
+    response = requests.post(url, json=payload)
+    
+    if response.status_code == 200:
+        print("iWatch Twinned")
+    else:
+        print("Failed to send string to the server.")
 
 
 

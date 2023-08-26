@@ -134,7 +134,7 @@ def step6():
     else:
         print(f"Request failed with status code: {response.status_code}")
 
-    base_url = 'http://localhost:8081/connections/'
+    base_url = 'http://localhost:8181/connections/'
 
     url = f'{base_url}{connection_id}/send-message'
 
