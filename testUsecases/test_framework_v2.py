@@ -211,7 +211,7 @@ def main():
     #result, elapsed_time = time_execution(agents.deploy_consortium)
 
     #RUN USE CASES
-    #run_use_cases()
+    run_use_cases()
 
 
 if __name__ == "__main__":
