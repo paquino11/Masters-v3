@@ -271,7 +271,7 @@ def main():
     cpu_percent, ram_percent = tfv2.get_resource_usage()
     cpu_usage.append(cpu_percent)
     ram_usage.append(ram_percent)
-    r11, t = tfv2.time_executio
+    r11, t = tfv2.time_execution(step11)
     
     #n(step11)
     execution_times.append(t)
