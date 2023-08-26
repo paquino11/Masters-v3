@@ -75,6 +75,8 @@ def time_execution(func, *args, **kwargs):
     print("Time taken: {:.3f} seconds".format(elapsed_time))
     return result, elapsed_time
 
+
+
 def get_resource_usage():
     cpu_percent = psutil.cpu_percent(interval=0.1)
     ram_percent = psutil.virtual_memory().percent
@@ -190,16 +192,16 @@ def main():
     #remove_containers()
 
     #DEPLOY FABRIC NETWORK
-    result, elapsed_time = time_execution(deploy_fabric_network)
+    #result, elapsed_time = time_execution(deploy_fabric_network)
   
     #DEPLOY IPFS Node
-    result, elapsed_time = time_execution(deploy_ipfs_node)
+    #result, elapsed_time = time_execution(deploy_ipfs_node)
 
     #DEPLOY GATEWAY
-    result, elapsed_time = time_execution(deploy_gateway)
+    #result, elapsed_time = time_execution(deploy_gateway)
 
     #DEPLOY SMART DEVICE
-    result, elapsed_time = time_execution(deploy_smartdevice)
+    #result, elapsed_time = time_execution(deploy_smartdevice)
 
     #containers_to_remove = ["consortium", "consortium-postgres", "oem_egw", "oem_sd", "dave", "gatewayv2", "gateway-postgres", "smartdevice", "alice", "bob", "charlie"]
     #remove_containers(containers_to_remove)
@@ -209,7 +211,7 @@ def main():
     #result, elapsed_time = time_execution(agents.deploy_consortium)
 
     #RUN USE CASES
-    run_use_cases()
+    #run_use_cases()
 
 
 if __name__ == "__main__":

@@ -1,4 +1,6 @@
-FROM bcgovimages/von-image:py36-1.15-1
+#FROM bcgovimages/von-image:py36-1.15-1
+ARG from_image=ghcr.io/hyperledger/aries-cloudagent-python:py3.9-0.9.0
+FROM ${from_image}
 
 ENV ENABLE_PTVSD 0
 ENV ENABLE_PYDEVD_PYCHARM 0
@@ -35,8 +37,8 @@ ADD setup.py ./
 
 RUN pip3 install --no-cache-dir -e .
 
-RUN mkdir Agents logs && chown -R indy:indy Agents logs && chmod -R ug+rw Agents logs
-
+#RUN mkdir Agents logs && chown -R indy:indy Agents logs && chmod -R ug+rw Agents logs
+RUN mkdir demo logs && chown -R aries:aries demo logs && chmod -R ug+rw demo logs
 # Add and install demo code
 ADD Agents/requirements.txt ./Agents/requirements.txt
 RUN pip3 install --no-cache-dir -r Agents/requirements.txt

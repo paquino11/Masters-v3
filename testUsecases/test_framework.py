@@ -131,7 +131,6 @@ def oem_enrollment1():
 
     # Calculate the cumulative sum of values
     cumulative_values = np.cumsum(non_zero_values)
-
     # Create a Gantt chart
     fig, ax = plt.subplots()
 

@@ -213,24 +213,99 @@ def step11():
         return response.status_code
 
 
-"""def main():
-    tfv2.time_execution(step1)
-    tfv2.time_execution(step2)
-    tfv2.time_execution(step3)
-    response = tfv2.time_execution(step4)
-    tfv2.time_execution(step5)
-    tfv2.time_execution(step6)
-    time.sleep(10)
-    tfv2.time_execution(step7)
-    tfv2.time_execution(step8)
-    tfv2.time_execution(step9, response[0])
-    tfv2.time_execution(step10)
-    dave_inv = tfv2.time_execution(step11)
-    print(dave_inv)
-
-    return dave_inv"""
 
 def main():
+    execution_times = []
+    cpu_usage = []
+    ram_usage = []
+
+    r, t = tfv2.time_execution(step1)
+    execution_times.append(t)
+    cpu_percent, ram_percent = tfv2.get_resource_usage()
+    cpu_usage.append(cpu_percent)
+    ram_usage.append(ram_percent)
+    r, t = tfv2.time_execution(step2)
+    execution_times.append(t)
+    cpu_percent, ram_percent = tfv2.get_resource_usage()
+    cpu_usage.append(cpu_percent)
+    ram_usage.append(ram_percent)    
+    r, t = tfv2.time_execution(step3)
+    execution_times.append(t)
+    cpu_percent, ram_percent = tfv2.get_resource_usage()
+    cpu_usage.append(cpu_percent)
+    ram_usage.append(ram_percent)
+    r4, t = tfv2.time_execution(step4)
+    execution_times.append(t)
+    cpu_percent, ram_percent = tfv2.get_resource_usage()
+    cpu_usage.append(cpu_percent)
+    ram_usage.append(ram_percent)
+    r, t = tfv2.time_execution(step5)
+    execution_times.append(t)
+    cpu_percent, ram_percent = tfv2.get_resource_usage()
+    cpu_usage.append(cpu_percent)
+    ram_usage.append(ram_percent)
+    r, t = tfv2.time_execution(step6)
+    execution_times.append(t)
+    cpu_percent, ram_percent = tfv2.get_resource_usage()
+    cpu_usage.append(cpu_percent)
+    ram_usage.append(ram_percent)
+    time.sleep(10)
+    r, t = tfv2.time_execution(step7)
+    execution_times.append(t)
+    cpu_percent, ram_percent = tfv2.get_resource_usage()
+    cpu_usage.append(cpu_percent)
+    ram_usage.append(ram_percent)
+    r, t = tfv2.time_execution(step8)
+    execution_times.append(t)
+    cpu_percent, ram_percent = tfv2.get_resource_usage()
+    cpu_usage.append(cpu_percent)
+    ram_usage.append(ram_percent)
+    print(r4)
+    r, t = tfv2.time_execution(step9, r4)
+    execution_times.append(t)
+    cpu_percent, ram_percent = tfv2.get_resource_usage()
+    cpu_usage.append(cpu_percent)
+    ram_usage.append(ram_percent)
+    r, t = tfv2.time_execution(step10)
+    execution_times.append(t)
+    cpu_percent, ram_percent = tfv2.get_resource_usage()
+    cpu_usage.append(cpu_percent)
+    ram_usage.append(ram_percent)
+    r11, t = tfv2.time_executio
+    
+    #n(step11)
+    execution_times.append(t)
+    cpu_percent, ram_percent = tfv2.get_resource_usage()
+    cpu_usage.append(cpu_percent)
+    ram_usage.append(ram_percent)
+    print(r11)
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Plot Gantt chart (bar plot) on the same subplot
+    ax.barh(range(len(execution_times)), execution_times, color='blue')
+    ax.set_yticks(range(len(execution_times)))
+    ax.set_yticklabels(["Step {}".format(i+1) for i in range(len(execution_times))])
+    ax.set_xlabel('Execution Time')
+    ax.set_ylabel('Steps')
+    ax.set_title('Execution Time Gantt Chart')
+
+    # Plot CPU and RAM usage (line plots) on the same subplot
+    ax.plot(cpu_usage, label='CPU Usage')
+    ax.plot(ram_usage, label='RAM Usage')
+    ax.set_xlabel('Steps')
+    ax.set_ylabel('Usage (%)')
+    ax.set_title('Resource Usage Over Steps')
+    ax.legend()
+
+    # Show the combined plot
+    plt.show()
+
+    return r11
+
+
+
+"""def main():
     execution_times = []
     cpu_usage = []
     ram_usage = []
@@ -264,7 +339,7 @@ def main():
 
     plt.show()
 
-    return response
+    return response"""
 
 
 if __name__ == "__main__":
