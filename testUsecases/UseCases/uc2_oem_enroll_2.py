@@ -154,7 +154,7 @@ def step4():
                 enrollment_vc_id = cred_id
                 break
         if enrollment_vc_id:
-            print("Enrollment VC ID:", enrollment_vc_id)
+            #print("Enrollment VC ID:", enrollment_vc_id)
             print("")
         else:
             print("No Enrollment VC ID found.")
@@ -203,13 +203,100 @@ def step4():
 
     if response.status_code == 200:
         response_data = response.json()
-        print("it was proposed")
+        #print("it was proposed")
         return connection_id
     else:
         #print(f"Request failed with status code: {response.status_code}")
         print("")
+
 def step5():
     print("\nStep 5- O:1 provides the proofs to C:1. ")
+    #get oem connection of cons
+    url = 'http://localhost:8061/connections'
+    headers = {'accept': 'application/json'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        connection_id = None
+        
+        for result in data.get('results', []):
+            if result.get('alias') == 'consortium':
+                connection_id = result.get('connection_id')
+                break  # Stop searching once the desired connection is found
+        
+        if connection_id:
+            print(f"Connection ID for 'consortium': {connection_id}")
+        else:
+            print("No connection found for 'oem.egw.agent'")
+    else:
+        print(f"Request failed with status code: {response.status_code}")
+    #get VC id of enrollment
+    url = 'http://localhost:8181/credential-definitions/created'
+    headers = {'accept': 'application/json'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        credential_definition_ids = data['credential_definition_ids']
+        enrollment_vc_id = None
+        for cred_id in credential_definition_ids:
+            if cred_id.endswith('Enrollment_VC'):
+                enrollment_vc_id = cred_id
+                break
+        if enrollment_vc_id:
+            #print("Enrollment VC ID:", enrollment_vc_id)
+            print("")
+        else:
+            print("No Enrollment VC ID found.")
+    else:
+        print(f"Request failed with status code: {response.status_code}")
+    #send offer to OEM from consortium
+    url = 'http://localhost:8061/issue-credential/send-proposal'
+    headers = {'accept': 'application/json','Content-Type': 'application/json'}
+    connection_id = connection_id
+    cred_def_id = enrollment_vc_id
+
+    data = {
+            "auto_remove": True,
+            "comment": "string",
+            "connection_id": connection_id,
+            "cred_def_id": cred_def_id ,
+            "credential_preview": {
+                        "@type": "issue-credential/1.0/credential-preview",
+                        "attributes": [
+                            {
+                                "mime-type": "image/jpeg",
+                                "name": "name",
+                                "value": "Bosch"
+                            },
+                            {
+                                "mime-type": "image/jpeg",
+                                "name": "type",
+                                "value": "OEM"
+                            },
+                            {
+                                "mime-type": "image/jpeg",
+                                "name": "enrollDate",
+                                "value": str(int(time.time()))
+                            },
+                            {
+                                "mime-type": "image/jpeg",
+                                "name": "timestamp",
+                                "value": str(int(time.time()))
+                            }
+                        ]
+                    },
+            "trace": True
+            }
+
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+
+    if response.status_code == 200:
+        response_data = response.json()
+        #print("it was proposed")
+        return connection_id
+    else:
+        #print(f"Request failed with status code: {response.status_code}")
+        print("")
 
 def step6(connection_id):
     print("\nStep 6- Upon validating the submitted proofs, C:1 sends a message to O:1 to generate its ecosystem ledger credentials. ")

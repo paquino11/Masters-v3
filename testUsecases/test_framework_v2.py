@@ -76,7 +76,6 @@ def time_execution(func, *args, **kwargs):
     return result, elapsed_time
 
 
-
 def get_resource_usage():
     cpu_percent = psutil.cpu_percent(interval=0.1)
     ram_percent = psutil.virtual_memory().percent
@@ -143,10 +142,12 @@ def deploy_aries_agents():
     result, elapsed_time = time_execution(agents.deploy_dave)
 
     #DEPLOY EGW AGENT
-    result, elapsed_time = time_execution(agents.deploy_egw)
+    #deployed in uc4_1_2
+    #result, elapsed_time = time_execution(agents.deploy_egw)
 
     #DEPLOY SD AGENT
-    result, elapsed_time = time_execution(agents.deploy_sd)
+    #deployed in uc4_2_2
+    #result, elapsed_time = time_execution(agents.deploy_sd)
 
     #DEPLOY ALICE AGENT
     result, elapsed_time = time_execution(agents.deploy_alice)
@@ -161,28 +162,40 @@ def deploy_aries_agents():
 
 
 def run_use_cases():
-    print("UC1: \n")
+    #DONE
+    print("\n ==========================UC1========================== \n")
     uc1.main()
     time.sleep(2)
-    print("UC2: ")
+
+    #DONE
+    print("\n ==========================UC2========================== \n")
     uc2.main()
     time.sleep(2)
-    print("UC3: \n")
+
+    #DONE
+    print("\n ==========================UC3========================== \n")
     uc3.main()
     time.sleep(2)
-    print("UC4: \n")
+
+    #DONE
+    print("\n ==========================UC4========================== \n")
     uc4.main()
     time.sleep(2)
-    print("UC5: \n")
+    
+    #DONE
+    print("\n ==========================UC5========================== \n")
     uc5.main()
     time.sleep(2)
-    print("UC6: \n")
+
+    print("\n ==========================UC6========================== \n")
     uc6.main()
     time.sleep(2)
-    print("UC7: \n")
+
+    print("\n ==========================UC7========================== \n")
     uc7.main()
     time.sleep(2)
-    print("UC8: \n")
+
+    print("\n ==========================UC8========================== \n")
     uc8.main()
 
     
@@ -192,16 +205,16 @@ def main():
     #remove_containers()
 
     #DEPLOY FABRIC NETWORK
-    #result, elapsed_time = time_execution(deploy_fabric_network)
+    result, elapsed_time = time_execution(deploy_fabric_network)
   
     #DEPLOY IPFS Node
-    #result, elapsed_time = time_execution(deploy_ipfs_node)
+    result, elapsed_time = time_execution(deploy_ipfs_node)
 
     #DEPLOY GATEWAY
-    #result, elapsed_time = time_execution(deploy_gateway)
+    result, elapsed_time = time_execution(deploy_gateway)
 
     #DEPLOY SMART DEVICE
-    #result, elapsed_time = time_execution(deploy_smartdevice)
+    result, elapsed_time = time_execution(deploy_smartdevice)
 
     #containers_to_remove = ["consortium", "consortium-postgres", "oem_egw", "oem_sd", "dave", "gatewayv2", "gateway-postgres", "smartdevice", "alice", "bob", "charlie"]
     #remove_containers(containers_to_remove)

@@ -11,7 +11,7 @@ load_dotenv()
 
 # General configs
 #MONGO_DB_CLIENT = "docker_mongodb_1:27017"#os.environ.get("MONGO_DB_CLIENT", "docker_mongodb_1:27017")
-MONGO_DB_CLIENT = "docker-mongodb-1:27017"
+MONGO_DB_CLIENT = "docker_mongodb_1:27017"
 IPFS_CLIENT = "ipfs"#os.environ.get("IPFS_CLIENT", "ditto-ipfs")
 IPFS_CLIENT_PORT = 5002#os.environ.get("IPFS_CLIENT_PORT", 5001)
 

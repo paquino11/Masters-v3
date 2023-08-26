@@ -48,14 +48,14 @@ def step2():
 
 def step3():
     print("Step 3- C:1 generates a DeviceModelID and anchors the information into DT Ledger. ")
-    """url = "http://localhost:3025/regdevmodel"
-    payload = {"string": "devmodel"}
+    url = "http://localhost:3025/regdataset"
+    payload = {"string": "devmodel134"}
     response = requests.post(url, json=payload)
     
     if response.status_code == 200:
-        print("Hash sent successfully to Fabric!")
+        print("Dev Model registered!")
     else:
-        print("Failed to send string to the server.")"""
+        print("Failed to send string to the server.")
 
 def step4():
     print("Step 4- C:1 loads the WoT file to the consortium source control. ")
@@ -114,6 +114,40 @@ def step5():
 
 def step6():
     print("Step 6- C:1 uses Aries RFC 0095 to send the deviceModelID along with DeviceName to O:1. ")
+    #get oem connection of cons
+    url = 'http://localhost:8181/connections'
+    headers = {'accept': 'application/json'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        connection_id = None
+        
+        for result in data.get('results', []):
+            if result.get('their_label') == 'oem.egw.agent':
+                connection_id = result.get('connection_id')
+                break  # Stop searching once the desired connection is found
+        
+        if connection_id:
+            print(f"Connection ID for 'oem.egw.agent': {connection_id}")
+        else:
+            print("No connection found for 'oem.egw.agent'")
+    else:
+        print(f"Request failed with status code: {response.status_code}")
+
+    base_url = 'http://localhost:8081/connections/'
+
+    url = f'{base_url}{connection_id}/send-message'
+
+    headers = {
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+
+    data = {
+        "content": "Device Model ID: devmodel134, Device Name: iWatch"
+    }
+
+    response = requests.post(url, headers=headers, json=data)
 
 
 def main():
