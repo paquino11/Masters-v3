@@ -75,7 +75,6 @@ async function main(): Promise<void> {
 
         // Get the smart contract from the network.
         const contract = network.getContract(chaincodeName);
-        console.log(contract)
         console.log(network)
 
         app.post('/regdataset', async (req: Request, res: Response) => {

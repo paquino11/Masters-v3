@@ -14,6 +14,8 @@ import UseCases.uc7_dev_twin as uc7
 import UseCases.uc8_dev_untwin as uc8
 #import UseCases.run_all_uc as run_all
 import psutil
+import requests
+import base64
 
 
 def remove_containers(container_names=None):
@@ -161,44 +163,107 @@ def deploy_aries_agents():
     print("Aries Agents Deployed")
 
 
+def get_cpu_ram_usage(interval=0.1, cpu_usage=[], ram_usage=[], stop_event=None):
+    while not stop_event.is_set():
+        cpu_percent = psutil.cpu_percent(interval=interval)
+        ram_percent = psutil.virtual_memory().percent
+
+        cpu_usage.append(cpu_percent)
+        ram_usage.append(ram_percent)
+
 def run_use_cases():
     #DONE
     print("\n ==========================UC1========================== \n")
     uc1.main()
-    time.sleep(15)
+    #time.sleep(15)
 
     #DONE
     print("\n ==========================UC2========================== \n")
     uc2.main()
-    time.sleep(15)
+    #time.sleep(15)
 
     #DONE
     print("\n ==========================UC3========================== \n")
     uc3.main()
-    time.sleep(15)
+    #time.sleep(15)
 
     #DONE
     print("\n ==========================UC4========================== \n")
     uc4.main()
-    time.sleep(15)
+    #time.sleep(15)
     
     #DONE
     print("\n ==========================UC5========================== \n")
     uc5.main()
-    time.sleep(15)
+    #time.sleep(15)
 
     print("\n ==========================UC6========================== \n")
     uc6.main()
-    time.sleep(15)
+    #time.sleep(15)
 
     print("\n ==========================UC7========================== \n")
     uc7.main()
-    time.sleep(15)
+    #time.sleep(15)
 
     print("\n ==========================UC8========================== \n")
     uc8.main()
 
-    
+
+def save_on_git_hub(plot_name):
+    print(plot_name)
+    access_token = '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'
+
+    # Set the repository details
+    owner = 'paquino11'
+    repo = 'plots'
+
+    # Set the branch where you want to add the file
+    branch = 'main'  # Replace with the desired branch name
+
+    # Set the file details
+    change_to_root_dir()
+    os.chdir("testUsecases/")
+    file_path1 = plot_name
+    # Read the content of the file
+    with open(file_path1, 'rb') as file:        
+        file_content = file.read()
+
+    # Set the API endpoint URL
+    import datetime
+
+    current_timestamp = str(datetime.datetime.now())
+
+    url = f'https://api.github.com/repos/{owner}/{repo}/contents/{plot_name}'
+
+    # Set the headers
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+        'Accept': 'application/vnd.github.v3+json'
+    }
+
+    # Prepare the request payload
+    data = {
+        'message': 'Add file via API',
+        'content': base64.b64encode(file_content).decode()
+    }
+
+    # Encode the file content as base64
+
+    #data['content'] = base64.b64encode(data['content'].encode()).decode()
+
+    # Send the POST request to create the file
+    response = requests.put(url, headers=headers, json=data)
+
+    # Check the response
+    if response.status_code == 201:
+        print('File added successfully!')
+    else:
+        print(f'Failed to add file. Status code: {response.status_code}, Error message: {response.json()["message"]}')
+
+
+
+
+
 
 def main():
     #REMOVE ALL DOCKER CONTAINERS

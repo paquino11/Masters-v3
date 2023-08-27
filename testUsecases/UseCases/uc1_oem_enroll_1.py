@@ -1,7 +1,7 @@
 import subprocess
 import os
 import time
-import sys
+import sys, threading
 import requests
 sys.path.append('/home/pedro/Desktop/Masters-v3/testUsecases/') 
 import test_framework_v2 as tfv2
@@ -11,6 +11,8 @@ from psycopg2 import sql
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import matplotlib.pyplot as plt
 import numpy as np
+import psutil, datetime
+
 
 def step1():
     print("\nStep 1- Dave taps the “Enroll OEM” button on the consortium’s marketing website.")
@@ -211,7 +213,7 @@ def step11():
 
     if response.status_code == 200:
         response_data = response.json()
-        print(response_data)
+        #print(response_data)
         return response_data
     else:
         #print("Request failed with status code:", response.status_code)
@@ -221,132 +223,137 @@ def step11():
 
 
 def main():
-    execution_times = []
+
+    categories = []
+    values = []
+
     cpu_usage = []
     ram_usage = []
+    stop_event = threading.Event()
+
+    monitor_thread = threading.Thread(target=tfv2.get_cpu_ram_usage, args=(0.1, cpu_usage, ram_usage, stop_event))
+    monitor_thread.start()
 
     r, t = tfv2.time_execution(step1)
-    execution_times.append(t)
-    cpu_percent, ram_percent = tfv2.get_resource_usage()
-    cpu_usage.append(cpu_percent)
-    ram_usage.append(ram_percent)
+    categories.append('1')
+    values.append(t)
     r, t = tfv2.time_execution(step2)
-    execution_times.append(t)
-    cpu_percent, ram_percent = tfv2.get_resource_usage()
-    cpu_usage.append(cpu_percent)
-    ram_usage.append(ram_percent)    
+    categories.append('2')
+    values.append(t) 
     r, t = tfv2.time_execution(step3)
-    execution_times.append(t)
-    cpu_percent, ram_percent = tfv2.get_resource_usage()
-    cpu_usage.append(cpu_percent)
-    ram_usage.append(ram_percent)
+    categories.append('3')
+    values.append(t)
     r4, t = tfv2.time_execution(step4)
-    execution_times.append(t)
-    cpu_percent, ram_percent = tfv2.get_resource_usage()
-    cpu_usage.append(cpu_percent)
-    ram_usage.append(ram_percent)
+    categories.append('4')
+    values.append(t)
     r, t = tfv2.time_execution(step5)
-    execution_times.append(t)
-    cpu_percent, ram_percent = tfv2.get_resource_usage()
-    cpu_usage.append(cpu_percent)
-    ram_usage.append(ram_percent)
+    categories.append('5')
+    values.append(t)
     r, t = tfv2.time_execution(step6)
-    execution_times.append(t)
-    cpu_percent, ram_percent = tfv2.get_resource_usage()
-    cpu_usage.append(cpu_percent)
-    ram_usage.append(ram_percent)
+    categories.append('6')
+    values.append(t)
     time.sleep(10)
     r, t = tfv2.time_execution(step7)
-    execution_times.append(t)
-    cpu_percent, ram_percent = tfv2.get_resource_usage()
-    cpu_usage.append(cpu_percent)
-    ram_usage.append(ram_percent)
+    categories.append('7')
+    values.append(t)
     r, t = tfv2.time_execution(step8)
-    execution_times.append(t)
-    cpu_percent, ram_percent = tfv2.get_resource_usage()
-    cpu_usage.append(cpu_percent)
-    ram_usage.append(ram_percent)
-    print(r4)
+    categories.append('8')
+    values.append(t)
+    #print(r4)
     r, t = tfv2.time_execution(step9, r4)
-    execution_times.append(t)
-    cpu_percent, ram_percent = tfv2.get_resource_usage()
-    cpu_usage.append(cpu_percent)
-    ram_usage.append(ram_percent)
+    categories.append('9')
+    values.append(t)
     r, t = tfv2.time_execution(step10)
-    execution_times.append(t)
-    cpu_percent, ram_percent = tfv2.get_resource_usage()
-    cpu_usage.append(cpu_percent)
-    ram_usage.append(ram_percent)
+    categories.append('10')
+    values.append(t)
     r11, t = tfv2.time_execution(step11)
-    
-    #n(step11)
-    execution_times.append(t)
-    cpu_percent, ram_percent = tfv2.get_resource_usage()
-    cpu_usage.append(cpu_percent)
-    ram_usage.append(ram_percent)
-    print(r11)
+    categories.append('11')
+    values.append(t)
 
-    """fig, ax = plt.subplots(figsize=(10, 6))
+    print(categories)
+    print(values)
 
-    # Plot Gantt chart (bar plot) on the same subplot
-    ax.barh(range(len(execution_times)), execution_times, color='blue')
-    ax.set_yticks(range(len(execution_times)))
-    ax.set_yticklabels(["Step {}".format(i+1) for i in range(len(execution_times))])
-    ax.set_xlabel('Execution Time')
+    stop_event.set()
+
+    monitor_thread.join()
+
+    # Filter out categories and values with 0 values
+    non_zero_categories = []
+    non_zero_values = []
+    for cat, val in zip(categories, values):
+        if val != 0:
+            non_zero_categories.append(cat)
+            non_zero_values.append(val)
+
+
+    # Calculate the cumulative sum of values
+    cumulative_values = np.cumsum(non_zero_values)
+    # Create a Gantt chart
+    fig, ax = plt.subplots()
+
+# Plot horizontal bars representing tasks
+    bar_starts = np.roll(cumulative_values, 1)
+    bar_durations = non_zero_values
+    ax.barh(non_zero_categories, bar_durations, left=bar_starts, alpha=0.6)
+    ax.set_xlabel('Time')
     ax.set_ylabel('Steps')
-    ax.set_title('Execution Time Gantt Chart')
+    ax.set_xlim(0, sum(non_zero_values))
+    print(cpu_usage)
+    print(ram_usage)
 
-    # Plot CPU and RAM usage (line plots) on the same subplot
-    ax.plot(cpu_usage, label='CPU Usage')
-    ax.plot(ram_usage, label='RAM Usage')
-    ax.set_xlabel('Steps')
-    ax.set_ylabel('Usage (%)')
-    ax.set_title('Resource Usage Over Steps')
-    ax.legend()
 
-    # Show the combined plot
+    something = False
+    something1 = False
+    while something == False:
+        try:
+            time_interval = 0.1  # Update interval in seconds
+            num_points = len(cpu_usage) # Number of points to show on the graph
+            time_values = np.arange(0, num_points * time_interval, time_interval)
+            
+            # Create a second subplot for the CPU usage
+            cpu_ax = ax.twinx()
+            cpu_ax.plot(time_values, cpu_usage, color='r', label='CPU usage (%)')
+            cpu_ax.set_ylabel('CPU usage (%)')
+            something = True
+        except:
+            if something1 == False:
+                cpu_usage.append(psutil.cpu_percent())
+            else:
+                cpu_usage.pop()
+                cpu_usage.pop()
+    # Create a second subplot for the CPU usage
+    #cpu_ax = ax.twinx()
+    #cpu_ax.plot(time_values, cpu_usage, color='r', label='CPU usage')
+    #cpu_ax.set_ylabel('CPU usage (%)')
+
+    
+    # Create a third subplot for the RAM usage
+    ram_ax = ax.twinx()
+    ram_ax.plot(ram_usage, color='b', label='RAM usage')
+    ram_ax.set_ylabel('RAM usage (GB)')
+
+    # Adjust the position of the RAM usage subplot
+    ram_ax.spines['right'].set_position(('outward', 60))
+    ram_ax.set_ylim(0, max(ram_usage))
+    ram_ax.yaxis.label.set_color('b')
+    ram_ax.tick_params(axis='y', colors='b')
+
+    # Add a legend
+    fig.legend(loc='upper right')
+
+    plt.tight_layout()  # Adjust the layout to prevent overlapping
+    # Get the current date and time
+    current_datetime = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+
+    # Construct the filename with the current date and time
+    filename = f'UseCases/plots/uc1_{current_datetime}.png'
+
+    # Save the plot to the constructed filename
+    plt.savefig(filename)
+    tfv2.save_on_git_hub(filename)
     plt.show()
-"""
-    #return r11
 
-
-
-"""def main():
-    execution_times = []
-    cpu_usage = []
-    ram_usage = []
-
-    for step in [step1, step2, step3, step4, step5, step6, step7, step8, step9, step10, step11]:
-        response, exe_time = tfv2.time_execution(step)
-
-        execution_times.append(exe_time)
-        cpu_percent, ram_percent = tfv2.get_resource_usage()
-        cpu_usage.append(cpu_percent)
-        ram_usage.append(ram_percent)
-
-    # Create Gantt chart
-    plt.figure(figsize=(10, 6))
-    plt.barh(range(len(execution_times)), execution_times, color='blue')
-    plt.yticks(range(len(execution_times)), ["Step {}".format(i+1) for i in range(len(execution_times))])
-    plt.xlabel('Execution Time')
-    plt.ylabel('Steps')
-    plt.title('Execution Time Gantt Chart')
-    plt.tight_layout()
-
-    # Plot CPU and RAM usage
-    plt.figure(figsize=(10, 6))
-    plt.plot(cpu_usage, label='CPU Usage')
-    plt.plot(ram_usage, label='RAM Usage')
-    plt.xlabel('Steps')
-    plt.ylabel('Usage (%)')
-    plt.title('Resource Usage Over Steps')
-    plt.legend()
-    plt.tight_layout()
-
-    plt.show()
-
-    return response"""
-
+    #print(values)   
 
 if __name__ == "__main__":
     main()

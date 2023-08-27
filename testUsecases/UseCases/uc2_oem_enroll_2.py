@@ -7,8 +7,10 @@ sys.path.append('/home/pedro/Desktop/Masters-v3/testUsecases/')
 import test_framework_v2 as tfv2
 import datetime
 import time
-import json
-
+import json, threading
+import matplotlib.pyplot as plt
+import numpy as np
+import psutil
 
 CRED_FORMAT_INDY = "indy"
 CRED_PREVIEW_TYPE = "https://didcomm.org/issue-credential/2.0/credential-preview"
@@ -435,16 +437,130 @@ def step10():
         print("")
 
 def main():
-    cons_pub_did = tfv2.time_execution(step1)
-    tfv2.time_execution(step2, cons_pub_did)
-    tfv2.time_execution(step3)
-    connect = tfv2.time_execution(step4)
-    tfv2.time_execution(step5)
-    tfv2.time_execution(step6, connect)
-    tfv2.time_execution(step7)
-    tfv2.time_execution(step8)
-    tfv2.time_execution(step9, connect)
-    tfv2.time_execution(step10)
+    categories = []
+    values = []
+
+    cpu_usage = []
+    ram_usage = []
+    stop_event = threading.Event()
+
+    monitor_thread = threading.Thread(target=tfv2.get_cpu_ram_usage, args=(0.1, cpu_usage, ram_usage, stop_event))
+    monitor_thread.start()
+
+
+    cons_pub_did, t = tfv2.time_execution(step1)
+    categories.append('1')
+    values.append(t)    
+    r, t = tfv2.time_execution(step2, cons_pub_did)
+    categories.append('2')
+    values.append(t)    
+    r, t = tfv2.time_execution(step3)
+    categories.append('3')
+    values.append(t)
+    connect, t = tfv2.time_execution(step4)
+    categories.append('4')
+    values.append(t)
+    r, t = tfv2.time_execution(step5)
+    categories.append('5')
+    values.append(t)
+    r, t = tfv2.time_execution(step6, connect)
+    categories.append('6')
+    values.append(t)
+    r, t = tfv2.time_execution(step7)
+    categories.append('7')
+    values.append(t)
+    r, t = tfv2.time_execution(step8)
+    categories.append('8')
+    values.append(t)
+    r, t = tfv2.time_execution(step9, connect)
+    categories.append('9')
+    values.append(t)
+    r, t = tfv2.time_execution(step10)
+    categories.append('10')
+    values.append(t)
+
+    print(categories)
+    print(values)
+
+    stop_event.set()
+
+    monitor_thread.join()
+
+    # Filter out categories and values with 0 values
+    non_zero_categories = []
+    non_zero_values = []
+    for cat, val in zip(categories, values):
+        if val != 0:
+            non_zero_categories.append(cat)
+            non_zero_values.append(val)
+
+
+    # Calculate the cumulative sum of values
+    cumulative_values = np.cumsum(non_zero_values)
+    # Create a Gantt chart
+    fig, ax = plt.subplots()
+
+# Plot horizontal bars representing tasks
+    bar_starts = np.roll(cumulative_values, 1)
+    bar_durations = non_zero_values
+    ax.barh(non_zero_categories, bar_durations, left=bar_starts, alpha=0.6)
+    ax.set_xlabel('Time')
+    ax.set_ylabel('Steps')
+    ax.set_xlim(0, sum(non_zero_values))
+    print(cpu_usage)
+    print(ram_usage)
+
+    something = False
+    something1 = False
+    while something == False:
+        try:
+            time_interval = 0.1  # Update interval in seconds
+            num_points = len(cpu_usage) # Number of points to show on the graph
+            time_values = np.arange(0, num_points * time_interval, time_interval)
+            
+            # Create a second subplot for the CPU usage
+            cpu_ax = ax.twinx()
+            cpu_ax.plot(time_values, cpu_usage, color='r', label='CPU usage (%)')
+            cpu_ax.set_ylabel('CPU usage (%)')
+            something = True
+        except:
+            if something1 == False:
+                cpu_usage.append(psutil.cpu_percent())
+            else:
+                cpu_usage.pop()
+                cpu_usage.pop()
+    # Create a second subplot for the CPU usage
+    #cpu_ax = ax.twinx()
+    #cpu_ax.plot(time_values, cpu_usage, color='r', label='CPU usage')
+    #cpu_ax.set_ylabel('CPU usage (%)')
+
+    # Create a third subplot for the RAM usage
+    ram_ax = ax.twinx()
+    ram_ax.plot(ram_usage, color='b', label='RAM usage')
+    ram_ax.set_ylabel('RAM usage (GB)')
+
+    # Adjust the position of the RAM usage subplot
+    ram_ax.spines['right'].set_position(('outward', 60))
+    ram_ax.set_ylim(0, max(ram_usage))
+    ram_ax.yaxis.label.set_color('b')
+    ram_ax.tick_params(axis='y', colors='b')
+
+    # Add a legend
+    fig.legend(loc='upper right')
+
+    plt.tight_layout()  # Adjust the layout to prevent overlapping
+        # Get the current date and time
+    current_datetime = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+
+    # Construct the filename with the current date and time
+    filename = f'UseCases/plots/uc2_{current_datetime}.png'
+
+    # Save the plot to the constructed filename
+    plt.savefig(filename)
+    tfv2.save_on_git_hub(filename)
+    plt.show()
+    print(values)   
+
 
 
 if __name__ == "__main__":
