@@ -28,7 +28,7 @@ export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org1.e
 export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
 export CORE_PEER_ADDRESS=localhost:7051
 
-peer chaincode query -C dtnetwork -n chaincode1 -c '{"Args":["GetAllDataBatchs"]}' | jq
+peer chaincode query -C dtnetwork1 -n chaincode1 -c '{"Args":["GetAllDataBatchs"]}' | jq
 
 cd fabric-network-cc/fabric-samples/test-network
 export PATH=${PWD}/../bin:$PATH
@@ -39,7 +39,7 @@ export CORE_PEER_TLS_ROOTCERT_FILE=${PWD}/organizations/peerOrganizations/org2.e
 export CORE_PEER_MSPCONFIGPATH=${PWD}/organizations/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
 export CORE_PEER_ADDRESS=localhost:9051
 
-peer chaincode query -C dtnetwork -n chaincode1 -c '{"Args":["GetAllDataBatchs"]}' | jq
+peer chaincode query -C dtnetwork1 -n chaincode1 -c '{"Args":["GetAllDataBatchs"]}' | jq
 ```
 
 ## Deploy Gateway

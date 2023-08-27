@@ -4,11 +4,11 @@ cd /Desktop/FabricNetwork/fabric-samples/test-network
 
 //put network up and create channel with name mychannel
 ./network.sh up createChannel
-./network.sh up createChannel -c dtnetwork -ca -s couchdb
+./network.sh up createChannel -c dtnetwork1 -ca -s couchdb
 
 //deploy chaincode on peer0.org1 and peer0.org2 and channel
 ./network.sh deployCC -c mychannel -ccn basic -ccp ../asset-transfer-basic/chaincode-go -ccl go
-./network.sh deployCC -c dtnetwork -ccn chaincode1 -ccp /home/pedro/Desktop/FabricNetwork/chaincode1 -ccl go 
+./network.sh deployCC -c dtnetwork1 -ccn chaincode1 -ccp /home/pedro/Desktop/FabricNetwork/chaincode1 -ccl go 
 
 
 //interact with the network as peer0.org1
@@ -76,9 +76,9 @@ peer lifecycle chaincode install chaincode1.tar.gz
 //
 peer lifecycle chaincode queryinstalled
 export CC_PACKAGE_ID=basic_1:ef2394600055b69053a488d0ea2ac66bd544e93bb1b272a68d8860df5ac82c8c
-peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" --channelID dtnetwork --name chaincode1 --version 1.0 --package-id $CC_PACKAGE_ID --sequence 1
+peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" --channelID dtnetwork1 --name chaincode1 --version 1.0 --package-id $CC_PACKAGE_ID --sequence 1
 
 
 //You can use the peer lifecycle chaincode querycommitted command to check if the chaincode definition you have approved has already been committed to the channel.
-peer lifecycle chaincode querycommitted --channelID dtnetwork --name chaincode1 --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
+peer lifecycle chaincode querycommitted --channelID dtnetwork1 --name chaincode1 --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
 

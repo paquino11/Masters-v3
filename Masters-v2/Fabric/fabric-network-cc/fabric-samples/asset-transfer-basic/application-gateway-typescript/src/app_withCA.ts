@@ -12,7 +12,7 @@ const app = express();
 app.use(bodyParser.json());
 
 
-const channelName = envOrDefault('CHANNEL_NAME', 'dtnetwork');
+const channelName = envOrDefault('CHANNEL_NAME', 'dtnetwork1');
 const chaincodeName = envOrDefault('CHAINCODE_NAME', 'chaincode1');
 const mspId = envOrDefault('MSP_ID', 'Org1MSP');
 

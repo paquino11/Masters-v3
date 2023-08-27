@@ -5,15 +5,15 @@
 ### Down existing Fabric Networks
 ```
 cd /FabricNetwork/fabric-samples/test-network
-./network.sh down -c dtnetwork
+./network.sh down -c dtnetwork1
 ```
 ### Up Network Fabric with couchdb
 ```
-./network.sh up createChannel -c dtnetwork -ca -s couchdb
+./network.sh up createChannel -c dtnetwork1 -ca -s couchdb
 ```
 ### Deploy chaincode
 ```
-./network.sh deployCC -c dtnetwork -ccn chaincode1 -ccp /FabricNetwork/chaincode1 -ccl go 
+./network.sh deployCC -c dtnetwork1 -ccn chaincode1 -ccp /FabricNetwork/chaincode1 -ccl go 
 ```
 
 ### Interact with the network as peer0.org1
@@ -40,17 +40,17 @@ export CORE_PEER_ADDRESS=localhost:9051
 
 ### InitLedger
 ```
-peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C dtnetwork -n chaincode1 --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"InitLedger","Args":[]}'
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C dtnetwork1 -n chaincode1 --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost:9051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/tls/ca.crt" -c '{"function":"InitLedger","Args":[]}'
 ```
 
 ### Query Assets
 ```
-peer chaincode query -C dtnetwork -n chaincode1 -c '{"Args":["GetAllAssets"]}' | jq
-peer chaincode query -C dtnetwork -n chaincode1 -c '{"Args":["GetAllDevices"]}' | jq
-peer chaincode query -C dtnetwork -n chaincode1 -c '{"Args":["GetAllAriesAgents"]}' | jq
-peer chaincode query -C dtnetwork -n chaincode1 -c '{"Args":["GetAllDeviceModels"]}' | jq
+peer chaincode query -C dtnetwork1 -n chaincode1 -c '{"Args":["GetAllAssets"]}' | jq
+peer chaincode query -C dtnetwork1 -n chaincode1 -c '{"Args":["GetAllDevices"]}' | jq
+peer chaincode query -C dtnetwork1 -n chaincode1 -c '{"Args":["GetAllAriesAgents"]}' | jq
+peer chaincode query -C dtnetwork1 -n chaincode1 -c '{"Args":["GetAllDeviceModels"]}' | jq
 ```
 ### BuyDevice
 ```
-peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C dtnetwork -n chaincode1 --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls --cafile "${PWD}/organizations/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem" -C dtnetwork1 -n chaincode1 --peerAddresses localhost:7051 --tlsRootCertFiles "${PWD}/organizations/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt" --peerAddresses localhost
 ```
