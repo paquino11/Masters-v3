@@ -11,6 +11,8 @@ subprocess.call("./network.sh up createChannel -c dtnetwork -ca -s couchdb", she
 
 subprocess.call("./network.sh deployCC -c dtnetwork -ccn chaincode1 -ccp ../../chaincode1 -ccl go", shell=True)
 
+current_directory = os.getcwd()
+print("Current Directory:", current_directory)
 os.chdir("../")
 
 subprocess.call("docker build -t fabric-gateway .", shell=True)
