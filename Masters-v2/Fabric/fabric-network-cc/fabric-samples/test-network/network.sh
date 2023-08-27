@@ -142,7 +142,7 @@ function createOrgs() {
 
   # Create crypto material using cryptogen
   if [ "$CRYPTO" == "cryptogen" ]; then
-    start=$(date +%s.%N)
+
     which cryptogen
     if [ "$?" -ne 0 ]; then
       fatalln "cryptogen tool not found. exiting"
@@ -199,8 +199,7 @@ function createOrgs() {
 
     infoln "Creating Org1 Identities"
     createOrg1
-    end=$(date +%s.%N)
-    echo "Creating Org1: $(echo "$end - $start" | bc) seconds"
+
 
     infoln "Creating OEM Identities"
 

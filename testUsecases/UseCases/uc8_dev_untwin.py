@@ -121,6 +121,7 @@ def step4():
 
 def step5():
     print("Step 5- egw:1 deletes the twin. ")
+    input("Data is being send to Gateway. Press ENTER to untwin")
     container_name = "iwatch-container"
     try:
         subprocess.run(["docker", "stop", container_name], check=True)
