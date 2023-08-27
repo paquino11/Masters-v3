@@ -279,7 +279,7 @@ function createChannel() {
   if ! $CONTAINER_CLI info > /dev/null 2>&1 ; then
     fatalln "$CONTAINER_CLI network is required to be running to create a channel"
   fi
-47  
+
   # check if all containers are present
   CONTAINERS=($($CONTAINER_CLI ps | grep hyperledger/ | awk '{print $2}'))
   len=$(echo ${#CONTAINERS[@]})
