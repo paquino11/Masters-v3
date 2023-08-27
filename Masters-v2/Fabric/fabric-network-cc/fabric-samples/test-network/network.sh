@@ -25,7 +25,6 @@ export VERBOSE=false
 # push to the required directory & set a trap to go back if needed
 pushd ${ROOTDIR} > /dev/null
 trap "popd > /dev/null" EXIT
-echo "Elapsed time: seconds"
 . scripts/utils.sh
 
 : ${CONTAINER_CLI:="docker"}
@@ -159,8 +158,7 @@ function createOrgs() {
     if [ $res -ne 0 ]; then
       fatalln "Failed to generate certificates..."
     fi
-    end=$(date +%s.%N)
-    echo "Elapsed time: $(echo "$end - $start" | bc) seconds"
+
     infoln "Creating Org2 Identities"
 
     set -x
