@@ -16,4 +16,3 @@ os.chdir("../")
 subprocess.call("docker build -t fabric-gateway .", shell=True)
 
 subprocess.call("docker run -d -p 3025:3025 --name fabric-gateway --network docker_default fabric-gateway", shell=True)
-

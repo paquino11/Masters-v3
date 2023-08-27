@@ -286,7 +286,7 @@ def main():
     ram_usage.append(ram_percent)
     print(r11)
 
-    fig, ax = plt.subplots(figsize=(10, 6))
+    """fig, ax = plt.subplots(figsize=(10, 6))
 
     # Plot Gantt chart (bar plot) on the same subplot
     ax.barh(range(len(execution_times)), execution_times, color='blue')
@@ -306,7 +306,7 @@ def main():
 
     # Show the combined plot
     plt.show()
-
+"""
     #return r11
 
 

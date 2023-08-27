@@ -82,7 +82,7 @@ def get_resource_usage():
     return cpu_percent, ram_percent
 
 def deploy_fabric_network():
-    containers = ["ca_orderer"]
+    containers = ["peer0.org1.example.com"]
     if not are_containers_deployed(containers):
         change_to_root_dir()
         print("Deploying Fabric Network")
