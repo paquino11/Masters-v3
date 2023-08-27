@@ -17,22 +17,22 @@ const chaincodeName = envOrDefault('CHAINCODE_NAME', 'chaincode1');
 const mspId = envOrDefault('MSP_ID', 'Org1MSP');
 
 // Path to crypto materials.
-//const cryptoPath = envOrDefault('CRYPTO_PATH', path.resolve(__dirname, '..', '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com'));
+const cryptoPath = envOrDefault('CRYPTO_PATH', path.resolve(__dirname, '..', '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com'));
 
 // Path to user private key directory.
-//const keyDirectoryPath = envOrDefault('KEY_DIRECTORY_PATH', path.resolve(cryptoPath, 'users', 'User1@org1.example.com', 'msp', 'keystore'));
+const keyDirectoryPath = envOrDefault('KEY_DIRECTORY_PATH', path.resolve(cryptoPath, 'users', 'User1@org1.example.com', 'msp', 'keystore'));
 
 // Path to user certificate.
-//const certPath = envOrDefault('CERT_PATH', path.resolve(cryptoPath, 'users', 'User1@org1.example.com', 'msp', 'signcerts', 'cert.pem'));
+const certPath = envOrDefault('CERT_PATH', path.resolve(cryptoPath, 'users', 'User1@org1.example.com', 'msp', 'signcerts', 'cert.pem'));
 
 // Path to peer tls certificate.
-//const tlsCertPath = envOrDefault('TLS_CERT_PATH', path.resolve(cryptoPath, 'peers', 'peer0.org1.example.com', 'tls', 'ca.crt'));
+const tlsCertPath = envOrDefault('TLS_CERT_PATH', path.resolve(cryptoPath, 'peers', 'peer0.org1.example.com', 'tls', 'ca.crt'));
 
 // Gateway peer endpoint.
-//const peerEndpoint = 'peer0.org1.example.com:7051';
+const peerEndpoint = 'peer0.org1.example.com:7051';
 
 // Gateway peer SSL host name override.
-//const peerHostAlias = envOrDefault('PEER_HOST_ALIAS', 'peer0.org1.example.com');
+const peerHostAlias = envOrDefault('PEER_HOST_ALIAS', 'peer0.org1.example.com');
 
 const utf8Decoder = new TextDecoder();
 const assetId = `agent${Date.now()}`;
@@ -41,10 +41,10 @@ const assetId = `agent${Date.now()}`;
 
 async function main(): Promise<void> {
 
-    //await displayInputParameters();
+    await displayInputParameters();
 
     // The gRPC client connection should be shared by all Gateway connections to this endpoint.
-    /*const client = await newGrpcConnection();
+    const client = await newGrpcConnection();
 
     const gateway = connect({
         client,
@@ -63,38 +63,38 @@ async function main(): Promise<void> {
         commitStatusOptions: () => {
             return { deadline: Date.now() + 60000 }; // 1 minute
         },
-    });*/
+    });
 
     
 
     try {
         // Get a network instance representing the channel where the smart contract is deployed.
-        //const network = gateway.getNetwork(channelName);
+        const network = gateway.getNetwork(channelName);
         console.log("hello")
-        //console.log(network)
+        console.log(network)
 
         // Get the smart contract from the network.
-        //const contract = network.getContract(chaincodeName);
-        //console.log(network)
+        const contract = network.getContract(chaincodeName);
+        console.log(network)
 
         app.post('/regdataset', async (req: Request, res: Response) => {
             const receivedString = req.body.string;
             console.log(`Received ipfs hash from client: ${receivedString}`);
-            //await BatchRegistration(contract, receivedString);
+            await BatchRegistration(contract, receivedString);
             res.sendStatus(200);
         });
 
         app.post('/regariesagent', async (req: Request, res: Response) => {
             //const receivedString = req.body.string;
             //console.log(`Received ipfs hash from client: ${receivedString}`);
-            //await AgentRegistration(contract);
+            await AgentRegistration(contract);
             res.sendStatus(200);
         });
 
         app.post('/regdevmodel', async (req: Request, res: Response) => {
             const receivedString = req.body.string;
             console.log(`Received ipfs hash from client: ${receivedString}`);
-            //await DeviceModelRegistration(contract, "devmodel1345132");
+            await DeviceModelRegistration(contract, "devmodel1345132");
             res.sendStatus(200);
         });
 
@@ -104,7 +104,7 @@ async function main(): Promise<void> {
             console.log('Server is running on port 3025');
         });
 
-        //await initLedger(contract);
+        await initLedger(contract);
 
 
 
@@ -118,7 +118,7 @@ main().catch(error => {
     console.error('******** FAILED to run the application:', error);
     process.exitCode = 1;
 });
-/*
+
 async function newGrpcConnection(): Promise<grpc.Client> {
     const tlsRootCert = await fs.readFile(tlsCertPath);
     const tlsCredentials = grpc.credentials.createSsl(tlsRootCert);
@@ -139,7 +139,7 @@ async function newSigner(): Promise<Signer> {
     const privateKey = crypto.createPrivateKey(privateKeyPem);
     return signers.newPrivateKeySigner(privateKey);
 }
-*/
+
 /**
  * This type of transaction would typically only be run once by an application the first time it was started after its
  * initial deployment. A new version of the chaincode deployed later would likely not need to run an "init" function.
@@ -412,7 +412,6 @@ function envOrDefault(key: string, defaultValue: string): string {
 /**
  * displayInputParameters() will print the global scope parameters used by the main driver routine.
  */
-/*
 async function displayInputParameters(): Promise<void> {
     console.log(`channelName:       ${channelName}`);
     console.log(`chaincodeName:     ${chaincodeName}`);
@@ -423,4 +422,4 @@ async function displayInputParameters(): Promise<void> {
     console.log(`tlsCertPath:       ${tlsCertPath}`);
     console.log(`peerEndpoint:      ${peerEndpoint}`);
     console.log(`peerHostAlias:     ${peerHostAlias}`);
-}*/
+}
