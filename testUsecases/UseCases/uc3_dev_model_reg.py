@@ -1,4 +1,4 @@
-import sys, os, psutil, datetime
+import sys, os, psutil, datetime, time
 sys.path.append('/home/pedro/Desktop/Masters-v3/testUsecases/')
 import test_framework_v2 as tfv2
 import requests, threading
@@ -39,7 +39,7 @@ def step1():
 
     if response.status_code == 200:
         data = response.json()
-        print(data)
+        #print(data)
     else:
         print(f"Request failed with status code: {response.status_code}")
 
@@ -259,9 +259,11 @@ def main():
 
     # Construct the filename with the current date and time
     filename = f'UseCases/plots/uc3_{current_datetime}.png'
+    time.sleep(0.5)
 
     # Save the plot to the constructed filename
     plt.savefig(filename)
+    time.sleep(0.5)
     tfv2.save_on_git_hub(filename)
     plt.show()
     #print(values)   

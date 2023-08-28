@@ -1,4 +1,4 @@
-import sys, requests, threading, datetime
+import sys, requests, threading, datetime, time
 sys.path.append('/home/pedro/Desktop/Masters-v3/testUsecases/')
 import test_framework_v2 as tfv2
 import psycopg2
@@ -311,9 +311,11 @@ def main():
 
     # Construct the filename with the current date and time
     filename = f'UseCases/plots/uc7_{current_datetime}.png'
+    time.sleep(0.5)
 
     # Save the plot to the constructed filename
     plt.savefig(filename)
+    time.sleep(0.5)
     tfv2.save_on_git_hub(filename)
     plt.show()
     #print(values)   

@@ -588,9 +588,11 @@ def main():
 
     # Construct the filename with the current date and time
     filename = f'UseCases/plots/uc4_{current_datetime}.png'
+    time.sleep(0.5)
 
     # Save the plot to the constructed filename
     plt.savefig(filename)
+    time.sleep(0.5)
     tfv2.save_on_git_hub(filename)
     plt.show()
     #print(values)   
