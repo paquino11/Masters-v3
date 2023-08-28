@@ -290,8 +290,8 @@ def main():
     values.append(t)
 
 
-    print(categories)
-    print(values)
+    #print(categories)
+    #print(values)
 
     stop_event.set()
 
@@ -372,7 +372,7 @@ def main():
     plt.savefig(filename)
     tfv2.save_on_git_hub(filename)
     plt.show()
-    print(values)   
+    #print(values)   
 
 if __name__ == "__main__":
     main()

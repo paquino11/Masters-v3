@@ -37,7 +37,7 @@ def step1():
 
     if response.status_code == 200:
         data = response.json()
-        print(data)
+        #print(data)
     else:
         print(f"Request failed with status code {response.status_code}")
 
@@ -138,7 +138,8 @@ def step4():
                 break  # Stop searching once the desired connection is found
         
         if connection_id:
-            print(f"Connection ID for 'consortium': {connection_id}")
+            #print(f"Connection ID for 'consortium': {connection_id}")
+            print("")
         else:
             print("No connection found for 'oem.egw.agent'")
     else:
@@ -227,7 +228,8 @@ def step5():
                 break  # Stop searching once the desired connection is found
         
         if connection_id:
-            print(f"Connection ID for 'consortium': {connection_id}")
+            #print(f"Connection ID for 'consortium': {connection_id}")
+            print("")
         else:
             print("No connection found for 'oem.egw.agent'")
     else:
@@ -479,8 +481,8 @@ def main():
     categories.append('10')
     values.append(t)
 
-    print(categories)
-    print(values)
+    #print(categories)
+    #print(values)
 
     stop_event.set()
 
@@ -559,7 +561,7 @@ def main():
     plt.savefig(filename)
     tfv2.save_on_git_hub(filename)
     plt.show()
-    print(values)   
+    #print(values)   
 
 
 

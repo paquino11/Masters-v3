@@ -274,7 +274,8 @@ def step1_2():
                 break
         
         if consortium_connection_id:
-            print(f"Consortium Connection ID: {consortium_connection_id}")
+            #print(f"Consortium Connection ID: {consortium_connection_id}")
+            print("")
         else:
             print("No connection with alias 'consortium' found.")
     else:
@@ -1007,8 +1008,8 @@ def main():
     categories.append('2_15')
     values.append(t)
 
-    print(categories)
-    print(values)
+    #print(categories)
+    #print(values)
 
     stop_event.set()
 
@@ -1089,7 +1090,7 @@ def main():
     plt.savefig(filename)
     tfv2.save_on_git_hub(filename)
     plt.show()
-    print(values)   
+    #print(values)   
 
 
 if __name__ == "__main__":

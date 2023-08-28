@@ -165,7 +165,7 @@ def oem_enrollment1():
 
     plt.tight_layout()  # Adjust the layout to prevent overlapping
     plt.show()
-    print(values)
+    #print(values)
     categories.clear()
     values.clear()
 

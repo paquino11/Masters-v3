@@ -197,7 +197,7 @@ def step11():
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         response_data = response.json()
-        print(response_data)
+        #print(response_data)
         pub_did = response_data["result"]["did"]
     else:
         print("error")
@@ -270,8 +270,8 @@ def main():
     categories.append('11')
     values.append(t)
 
-    print(categories)
-    print(values)
+    #print(categories)
+    #print(values)
 
     stop_event.set()
 
@@ -353,7 +353,7 @@ def main():
     tfv2.save_on_git_hub(filename)
     plt.show()
 
-    #print(values)   
+    ##print(values)   
 
 if __name__ == "__main__":
     main()
