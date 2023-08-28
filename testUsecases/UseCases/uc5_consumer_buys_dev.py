@@ -336,6 +336,7 @@ def main():
             cpu_ax.set_ylabel('CPU usage (%)')
             something = True
         except:
+            print("error generating graph")
             if something1 == False:
                 cpu_usage.append(psutil.cpu_percent())
             else:
