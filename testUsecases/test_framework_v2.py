@@ -175,35 +175,35 @@ def run_use_cases():
     #DONE
     print("\n ==========================UC1========================== \n")
     uc1.main()
-    #time.sleep(15)
+    time.sleep(15)
 
     #DONE
     print("\n ==========================UC2========================== \n")
     uc2.main()
-    #time.sleep(15)
+    time.sleep(15)
 
     #DONE
     print("\n ==========================UC3========================== \n")
     uc3.main()
-    #time.sleep(15)
+    time.sleep(15)
 
     #DONE
     print("\n ==========================UC4========================== \n")
     uc4.main()
-    #time.sleep(15)
+    time.sleep(15)
     
     #DONE
     print("\n ==========================UC5========================== \n")
     uc5.main()
-    #time.sleep(15)
+    time.sleep(15)
 
     print("\n ==========================UC6========================== \n")
     uc6.main()
-    #time.sleep(15)
+    time.sleep(15)
 
     print("\n ==========================UC7========================== \n")
     uc7.main()
-    #time.sleep(15)
+    time.sleep(15)
 
     print("\n ==========================UC8========================== \n")
     uc8.main()
