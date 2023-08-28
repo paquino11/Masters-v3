@@ -214,8 +214,8 @@ def main():
     ax.set_xlabel('Time')
     ax.set_ylabel('Steps')
     ax.set_xlim(0, sum(non_zero_values))
-    print(cpu_usage)
-    print(ram_usage)
+    #print(cpu_usage)
+    #print(ram_usage)
 
     something = False
     something1 = False

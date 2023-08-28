@@ -142,7 +142,7 @@ def oem_enrollment1():
     ax.set_ylabel('Steps')
     ax.set_xlim(0, sum(non_zero_values))
     print(cpu_usage)
-    print(ram_usage)
+    #print(ram_usage)
 
     # Create a second subplot for the CPU usage
     cpu_ax = ax.twinx()
@@ -234,7 +234,7 @@ def oem_enrollment2():
     #ram_usage = np.random.random(int(np.ceil(sum(non_zero_values)))) * 16
 
     print(cpu_usage)
-    print(ram_usage)
+    #print(ram_usage)
 
     # Create a second subplot for the CPU usage
     cpu_ax = ax.twinx()
@@ -324,7 +324,7 @@ def dev_mode_reg():
     #ram_usage = np.random.random(int(np.ceil(sum(non_zero_values)))) * 16
 
     print(cpu_usage)
-    print(ram_usage)
+    #print(ram_usage)
 
     # Create a second subplot for the CPU usage
     cpu_ax = ax.twinx()
@@ -415,7 +415,7 @@ def egw_reg():
     #ram_usage = np.random.random(int(np.ceil(sum(non_zero_values)))) * 16
 
     print(cpu_usage)
-    print(ram_usage)
+    #print(ram_usage)
 
     # Create a second subplot for the CPU usage
     cpu_ax = ax.twinx()
@@ -507,7 +507,7 @@ def sd_reg():
     #ram_usage = np.random.random(int(np.ceil(sum(non_zero_values)))) * 16
 
     print(cpu_usage)
-    print(ram_usage)
+    #print(ram_usage)
 
     # Create a second subplot for the CPU usage
     cpu_ax = ax.twinx()
@@ -599,7 +599,7 @@ def consumer_buys_device():
     #ram_usage = np.random.random(int(np.ceil(sum(non_zero_values)))) * 16
 
     print(cpu_usage)
-    print(ram_usage)
+    #print(ram_usage)
 
     # Create a second subplot for the CPU usage
     cpu_ax = ax.twinx()
@@ -688,7 +688,7 @@ def claim_egw():
     #ram_usage = np.random.random(int(np.ceil(sum(non_zero_values)))) * 16
 
     print(cpu_usage)
-    print(ram_usage)
+    #print(ram_usage)
 
     # Create a second subplot for the CPU usage
     cpu_ax = ax.twinx()
@@ -789,7 +789,7 @@ def claim_sd():
     #ram_usage = np.random.random(int(np.ceil(sum(non_zero_values)))) * 16
 
     print(cpu_usage)
-    print(ram_usage)
+    #print(ram_usage)
 
     # Create a second subplot for the CPU usage
     cpu_ax = ax.twinx()
@@ -882,7 +882,7 @@ def twin_sd():
     #ram_usage = np.random.random(int(np.ceil(sum(non_zero_values)))) * 16
 
     print(cpu_usage)
-    print(ram_usage)
+    #print(ram_usage)
 
     # Create a second subplot for the CPU usage
     cpu_ax = ax.twinx()
@@ -973,7 +973,7 @@ def untwin_sd():
     #ram_usage = np.random.random(int(np.ceil(sum(non_zero_values)))) * 16
 
     print(cpu_usage)
-    print(ram_usage)
+    #print(ram_usage)
 
     # Create a second subplot for the CPU usage
     cpu_ax = ax.twinx()
@@ -1074,7 +1074,7 @@ def sell_sd():
     #ram_usage = np.random.random(int(np.ceil(sum(non_zero_values)))) * 16
 
     print(cpu_usage)
-    print(ram_usage)
+    #print(ram_usage)
 
     # Create a second subplot for the CPU usage
     cpu_ax = ax.twinx()
