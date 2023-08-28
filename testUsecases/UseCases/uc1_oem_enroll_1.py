@@ -347,6 +347,7 @@ def main():
     current_datetime = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
     # Construct the filename with the current date and time
+    print(os.curdir())
     filename = f'UseCases/plots/uc1_{current_datetime}.png'
 
     # Save the plot to the constructed filename
