@@ -211,7 +211,7 @@ def run_use_cases():
 
 def save_on_git_hub(plot_name):
     print(plot_name)
-    access_token = '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'
+    access_token = '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'
 
     # Set the repository details
     owner = 'paquino11'
@@ -222,7 +222,7 @@ def save_on_git_hub(plot_name):
 
     # Set the file details
     change_to_root_dir()
-    os.chdir("testUsecases/")
+    os.chdir("testUsecases/UseCases/plots")
     file_path1 = plot_name
     # Read the content of the file
     with open(file_path1, 'rb') as file:        

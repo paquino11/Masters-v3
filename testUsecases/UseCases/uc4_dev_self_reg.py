@@ -1,4 +1,4 @@
-import sys, requests, time, json, uuid, threading, psutil, datetime
+import sys, requests, time, json, uuid, threading, psutil, datetime, os
 sys.path.append('/home/pedro/Desktop/Masters-v3/testUsecases/')
 import test_framework_v2 as tfv2
 import AgentsDeployment.deploy_agents as agents
@@ -31,7 +31,7 @@ def step3_1():
 
     if response.status_code == 200:
         response_data = response.json()
-        print("Response:", response_data)
+        #print("Response:", response_data)
     else:
         print("Request failed with status code:", response.status_code)
     time.sleep(2)
@@ -49,7 +49,7 @@ def step4_1():
 
     if response.status_code == 200:
         response_data = response.json()
-        print("Response:", response_data)
+        #print("Response:", response_data)
         oem_did = response_data['result']['did']
     else:
         print("Request failed with status code:", response.status_code)
@@ -184,7 +184,7 @@ def step8_1():
 
     if response.status_code == 200:
         response_data = response.json()
-        print("Response:", response_data)
+        #print("Response:", response_data)
         oem_did = response_data['result']['did']
     else:
         print("Request failed with status code:", response.status_code)
@@ -231,7 +231,7 @@ def step4_2():
 
     if response.status_code == 200:
         response_data = response.json()
-        print("Response:", response_data)
+        #print("Response:", response_data)
         oem_did = response_data['result']['did']
     else:
         print("Request failed with status code:", response.status_code)
@@ -542,7 +542,7 @@ def main():
     #print(cpu_usage)
     #print(ram_usage)
 
-    something = False
+    """something = False
     something1 = False
     while something == False:
         try:
@@ -561,7 +561,7 @@ def main():
                 cpu_usage.append(psutil.cpu_percent())
             else:
                 cpu_usage.pop()
-                cpu_usage.pop()
+                cpu_usage.pop()"""
     
     # Create a second subplot for the CPU usage
     #cpu_ax = ax.twinx()
@@ -569,7 +569,7 @@ def main():
     #cpu_ax.set_ylabel('CPU usage (%)')
 
     # Create a third subplot for the RAM usage
-    ram_ax = ax.twinx()
+    """ram_ax = ax.twinx()
     ram_ax.plot(ram_usage, color='b', label='RAM usage')
     ram_ax.set_ylabel('RAM usage (GB)')
 
@@ -582,17 +582,23 @@ def main():
     # Add a legend
     fig.legend(loc='upper right')
 
-    plt.tight_layout()  # Adjust the layout to prevent overlapping
+    plt.tight_layout()  # Adjust the layout to prevent overlapping"""
         # Get the current date and time
     current_datetime = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
-    # Construct the filename with the current date and time
-    filename = f'UseCases/plots/uc4_{current_datetime}.png'
-    time.sleep(0.5)
+# Construct the filename with the current date and time
+    tfv2.change_to_root_dir()
+    current_directory = os.getcwd()
+    print("Current Directory:", current_directory)
+    os.chdir('testUsecases/UseCases/plots/')
+    current_directory = os.getcwd()
+    print("Current Directory:", current_directory)
+    filename = f'uc1_{current_datetime}.png'
+    time.sleep(1)
 
     # Save the plot to the constructed filename
     plt.savefig(filename)
-    time.sleep(0.5)
+    time.sleep(1)
     tfv2.save_on_git_hub(filename)
     plt.show()
     #print(values)   

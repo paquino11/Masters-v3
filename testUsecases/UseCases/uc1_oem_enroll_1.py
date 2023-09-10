@@ -301,8 +301,8 @@ def main():
     #print(cpu_usage)
     #print(ram_usage)
 
-
-    something = False
+    
+    """    something = False
     something1 = False
     while something == False:
         try:
@@ -311,9 +311,9 @@ def main():
             time_values = np.arange(0, num_points * time_interval, time_interval)
             
             # Create a second subplot for the CPU usage
-            cpu_ax = ax.twinx()
-            cpu_ax.plot(time_values, cpu_usage, color='r', label='CPU usage (%)')
-            cpu_ax.set_ylabel('CPU usage (%)')
+            #cpu_ax = ax.twinx()
+            #cpu_ax.plot(time_values, cpu_usage, color='r', label='CPU usage (%)')
+            #cpu_ax.set_ylabel('CPU usage (%)')
             something = True
         except:
             print("error generating graph")
@@ -321,7 +321,7 @@ def main():
                 cpu_usage.append(psutil.cpu_percent())
             else:
                 cpu_usage.pop()
-                cpu_usage.pop()
+                cpu_usage.pop()"""
     # Create a second subplot for the CPU usage
     #cpu_ax = ax.twinx()
     #cpu_ax.plot(time_values, cpu_usage, color='r', label='CPU usage')
@@ -329,7 +329,7 @@ def main():
 
     
     # Create a third subplot for the RAM usage
-    ram_ax = ax.twinx()
+    """    ram_ax = ax.twinx()
     ram_ax.plot(ram_usage, color='b', label='RAM usage')
     ram_ax.set_ylabel('RAM usage (GB)')
 
@@ -337,24 +337,28 @@ def main():
     ram_ax.spines['right'].set_position(('outward', 60))
     ram_ax.set_ylim(0, max(ram_usage))
     ram_ax.yaxis.label.set_color('b')
-    ram_ax.tick_params(axis='y', colors='b')
+    ram_ax.tick_params(axis='y', colors='b')"""
 
     # Add a legend
-    fig.legend(loc='upper right')
+    """    fig.legend(loc='upper right')"""
 
     plt.tight_layout()  # Adjust the layout to prevent overlapping
     # Get the current date and time
     current_datetime = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
     # Construct the filename with the current date and time
+    tfv2.change_to_root_dir()
     current_directory = os.getcwd()
     print("Current Directory:", current_directory)
-    filename = f'UseCases/plots/uc1_{current_datetime}.png'
-    time.sleep(0.5)
+    os.chdir('testUsecases/UseCases/plots/')
+    current_directory = os.getcwd()
+    print("Current Directory:", current_directory)
+    filename = f'uc1_{current_datetime}.png'
+    time.sleep(1)
 
     # Save the plot to the constructed filename
     plt.savefig(filename)
-    time.sleep(0.5)
+    time.sleep(1)
     tfv2.save_on_git_hub(filename)
     plt.show()
 

@@ -10,7 +10,7 @@ import time
 import json, threading
 import matplotlib.pyplot as plt
 import numpy as np
-import psutil
+import psutil, os
 
 CRED_FORMAT_INDY = "indy"
 CRED_PREVIEW_TYPE = "https://didcomm.org/issue-credential/2.0/credential-preview"
@@ -512,7 +512,7 @@ def main():
     #print(cpu_usage)
     #print(ram_usage)
 
-    something = False
+    """something = False
     something1 = False
     while something == False:
         try:
@@ -531,14 +531,14 @@ def main():
                 cpu_usage.append(psutil.cpu_percent())
             else:
                 cpu_usage.pop()
-                cpu_usage.pop()
+                cpu_usage.pop()"""
     # Create a second subplot for the CPU usage
     #cpu_ax = ax.twinx()
     #cpu_ax.plot(time_values, cpu_usage, color='r', label='CPU usage')
     #cpu_ax.set_ylabel('CPU usage (%)')
 
     # Create a third subplot for the RAM usage
-    ram_ax = ax.twinx()
+    """ram_ax = ax.twinx()
     ram_ax.plot(ram_usage, color='b', label='RAM usage')
     ram_ax.set_ylabel('RAM usage (GB)')
 
@@ -551,17 +551,23 @@ def main():
     # Add a legend
     fig.legend(loc='upper right')
 
-    plt.tight_layout()  # Adjust the layout to prevent overlapping
+    plt.tight_layout()  # Adjust the layout to prevent overlapping"""
         # Get the current date and time
     current_datetime = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
     # Construct the filename with the current date and time
-    filename = f'UseCases/plots/uc2_{current_datetime}.png'
-    time.sleep(0.5)
+    tfv2.change_to_root_dir()
+    current_directory = os.getcwd()
+    print("Current Directory:", current_directory)
+    os.chdir('testUsecases/UseCases/plots/')
+    current_directory = os.getcwd()
+    print("Current Directory:", current_directory)
+    filename = f'uc1_{current_datetime}.png'
+    time.sleep(1)
 
     # Save the plot to the constructed filename
     plt.savefig(filename)
-    time.sleep(0.5)
+    time.sleep(1)
     tfv2.save_on_git_hub(filename)
     plt.show()
     #print(values)   
