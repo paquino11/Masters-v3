@@ -196,21 +196,24 @@ def main():
             non_zero_categories.append(cat)
             non_zero_values.append(val)
 
-
     # Calculate the cumulative sum of values
     cumulative_values = np.cumsum(non_zero_values)
     # Create a Gantt chart
     fig, ax = plt.subplots()
 
-# Plot horizontal bars representing tasks
     bar_starts = np.roll(cumulative_values, 1)
+    bar_starts[0] = 0  # Set the left value of the first bar to 0
     bar_durations = non_zero_values
-    ax.barh(non_zero_categories, bar_durations, left=bar_starts, alpha=0.6)
+    bar_midpoints = np.array([bar_start + duration / 2 for bar_start, duration in zip(bar_starts, bar_durations)])
+    bars = ax.barh(non_zero_categories, bar_durations, left=bar_starts, alpha=0.6)
+    # Add values to the middle of each bar
+    for i, (category, midpoint) in enumerate(zip(non_zero_categories, bar_midpoints)):
+        value = bar_durations[i]
+        ax.text(midpoint+0.1, i, f'{value:.3f} s', va='center', ha='center')
+
     ax.set_xlabel('Time')
     ax.set_ylabel('Steps')
     ax.set_xlim(0, sum(non_zero_values))
-    #print(cpu_usage)
-    #print(ram_usage)
 
 
     """something = False
@@ -264,7 +267,7 @@ def main():
     os.chdir('testUsecases/UseCases/plots/')
     current_directory = os.getcwd()
     print("Current Directory:", current_directory)
-    filename = f'uc1_{current_datetime}.png'
+    filename = f'uc8_{current_datetime}.png'
     time.sleep(1)
     # Save the plot to the constructed filename
     plt.savefig(filename)

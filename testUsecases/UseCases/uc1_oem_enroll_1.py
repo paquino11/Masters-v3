@@ -291,13 +291,22 @@ def main():
     # Create a Gantt chart
     fig, ax = plt.subplots()
 
-# Plot horizontal bars representing tasks
     bar_starts = np.roll(cumulative_values, 1)
     bar_durations = non_zero_values
-    ax.barh(non_zero_categories, bar_durations, left=bar_starts, alpha=0.6)
+    bar_midpoints = np.array([bar_start + duration / 2 for bar_start, duration in zip(bar_starts, bar_durations)])
+    bars = ax.barh(non_zero_categories, bar_durations, left=bar_starts, alpha=0.6)
+    # Add values to the middle of each bar
+    for i, (category, midpoint) in enumerate(zip(non_zero_categories, bar_midpoints)):
+        value = bar_durations[i]
+        ax.text(midpoint+0.1, i, f'{value:.3f} s', va='center', ha='center')
+
+
+
+    #ax.barh(non_zero_categories, bar_durations, left=bar_starts, alpha=0.6)
     ax.set_xlabel('Time')
     ax.set_ylabel('Steps')
     ax.set_xlim(0, sum(non_zero_values))
+    #ax.set_xlim(0, max(bar_midpoints) + max(bar_durations))
     #print(cpu_usage)
     #print(ram_usage)
 

@@ -211,7 +211,7 @@ def run_use_cases():
 
 def save_on_git_hub(plot_name):
     print(plot_name)
-    access_token = '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'
+    access_token = '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'
 
     # Set the repository details
     owner = 'paquino11'
