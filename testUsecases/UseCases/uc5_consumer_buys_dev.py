@@ -318,7 +318,7 @@ def main():
     # Add values to the middle of each bar
     for i, (category, midpoint) in enumerate(zip(non_zero_categories, bar_midpoints)):
         value = bar_durations[i]
-        ax.text(midpoint+0.03, i, f'{value:.3f} s', va='center', ha='center')
+        ax.text(midpoint+0.5, i, f'{value:.3f} s', va='center', ha='center')
 
     ax.set_xlabel('Time')
     ax.set_ylabel('Steps')

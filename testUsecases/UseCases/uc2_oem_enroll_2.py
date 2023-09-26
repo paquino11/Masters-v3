@@ -10,7 +10,7 @@ import time
 import json, threading
 import matplotlib.pyplot as plt
 import numpy as np
-import psutil, os
+import psutil, os, subprocess
 
 CRED_FORMAT_INDY = "indy"
 CRED_PREVIEW_TYPE = "https://didcomm.org/issue-credential/2.0/credential-preview"
@@ -325,9 +325,29 @@ def step6(connection_id):
 
 def step7():
     print("\nStep 7- O:1 requests the consortium a X.509 certificate. ")
+    current_path = os.getcwd()
+    print(current_path)
+    cryptomaterial = "../../../Masters-v2/Fabric/fabric-network-cc/fabric-samples/test-network/addOrg3/"
+    os.chdir(cryptomaterial)
+    command = ["./addOrg3.sh", "generate"]
+    try:
+        subprocess.run(command, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}")
+    os.chdir(current_path)
 
 def step8():
     print("\nStep 8- O:1 makes an enrollment request. ")
+    current_path = os.getcwd()
+    print(current_path)
+    cryptomaterial = "../../../Masters-v2/Fabric/fabric-network-cc/fabric-samples/test-network/addOrg3/"
+    os.chdir(cryptomaterial)
+    command = ["./addOrg3.sh", "up"]
+    try:
+        subprocess.run(command, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}")
+    os.chdir(current_path)
 
 def step9(connection_id):
     print("\nStep 9- O:1 sends an acknowledgment to C:1 to indicate ledger successful enrollment. ")

@@ -41,9 +41,43 @@ def step1():
     response = requests.post(url, headers=headers, data='')
 
 def step2():
-    print("Step 2- B:1 selects the “Twin” “Action Menu” and submits the following information: \
+    print("Step 2- B:1 selects the “Untwin” “Action Menu” and submits the following information: \
                 SD_UUID - created by the SD during the 1st boot. \
                 Untwin configurations - While this is not part of this study, at this point Bob could in the future define untwining configurations such as whether he wants to delete all the data, part of the data, or to maintain all data.")
+    url = 'http://localhost:8181/connections'
+    headers = {'accept': 'application/json'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        connection_id = None
+        
+        for result in data.get('results', []):
+            if result.get('their_label') == 'oem.egw.agent':
+                connection_id = result.get('connection_id')
+                break  # Stop searching once the desired connection is found
+        
+        if connection_id:
+            #print(f"Connection ID for 'oem.egw.agent': {connection_id}")
+            print("")
+        else:
+            print("No connection found for 'oem.egw.agent'")
+    else:
+        print(f"Request failed with status code: {response.status_code}")
+
+    base_url = 'http://localhost:8181/connections/'
+
+    url = f'{base_url}{connection_id}/send-message'
+
+    headers = {
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+
+    data = {
+        "content": "Device Model ID: devmodel134, Device Name: iWatch"
+    }
+
+    response = requests.post(url, headers=headers, json=data)
 
 def step3():
     print("Step 3- egw:1 sends a message to sd:1 to stop streaming data.  ")
@@ -209,7 +243,7 @@ def main():
     # Add values to the middle of each bar
     for i, (category, midpoint) in enumerate(zip(non_zero_categories, bar_midpoints)):
         value = bar_durations[i]
-        ax.text(midpoint+0.1, i, f'{value:.3f} s', va='center', ha='center')
+        ax.text(midpoint+0.5, i, f'{value:.3f} s', va='center', ha='center')
 
     ax.set_xlabel('Time')
     ax.set_ylabel('Steps')

@@ -13,56 +13,35 @@ def step1_1():
 
 def step2_1():
     print("Step 2- A:1 establishes a connection with egw:1.   ")
-    url = 'http://0.0.0.0:8181/out-of-band/create-invitation'
-    params = { 'auto_accept': 'true', 'multi_use': 'false' }
-
-    headers = { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-
-    data = { "handshake_protocols": [ "rfc23" ], "use_public_did": False, "goal_code": "c2dt.consortium.enroll.OEM?UUID" }
-
-    response = requests.post(url, params=params, headers=headers, json=data)
-
-    if response.status_code == 200:
-        response_data = response.json()
-        #print(response_data)#"""['invitation_url']"""
-    else:
-        #print("Request failed with status code:", response.status_code)
-        #print("Response content:", response.text)
-        #return response.text
-        print("error")
-    recipient_keys = response_data['invitation']['services'][0]['recipientKeys']
-    invitation_id = response_data['invitation']['@id']
-    service_endpoint = response_data['invitation']['services'][0]['serviceEndpoint']
-
-    url = 'http://0.0.0.0:8201/out-of-band/receive-invitation?auto_accept=true&use_existing_connection=false&alias=consortium'    
-
-    headers = { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-
-    data = {
-        "@id": invitation_id,
-        "@type": "https://didcomm.org/out-of-band/1.1/invitation",
-        "handshake_protocols": [
-            "https://didcomm.org/didexchange/1.0"
-        ],
-        "services": [
-            {
-                "id": "string",
-                "recipientKeys": recipient_keys,
-                "serviceEndpoint": service_endpoint,
-                "type": "did-communication"
-            }
-        ]
+#get oem egwpub did
+    url = 'http://0.0.0.0:8061/wallet/did/public'
+    headers = {
+        'accept': 'application/json'
     }
-    response = requests.post(url, headers=headers, json=data)
+
+    response = requests.get(url, headers=headers)
+
     if response.status_code == 200:
         response_data = response.json()
-        #print(response_data)#"""['invitation_url']"""
+        #print("Response:", response_data)
+        oem_did = response_data['result']['did']
+    else:
+        print("Request failed with status code:", response.status_code)
+
+    #Implicit invitation from egw to oem egw
+    url = 'http://0.0.0.0:8091/didexchange/create-request'
+    params = { 'their_public_did': oem_did, "alias": "oem_egw" }
+    headers = { 'accept': 'application/json' }
+
+    response = requests.post(url, params=params, headers=headers)
+
+    if response.status_code == 200:
+        response_data = response.json()
         return response_data
     else:
         #print("Request failed with status code:", response.status_code)
         #print("Response content:", response.text)
-        #return response.text
-        print("error")
+        return response.status_code
 
 def step3_1():
     print("Step 3- egw:1 requests A:1 “EGW Ownership VC” proof.  ")

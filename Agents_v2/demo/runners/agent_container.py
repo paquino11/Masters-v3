@@ -232,6 +232,12 @@ class AriesAgent(DemoAgent):
             log_status("Credential exchange abandoned")
             self.log("Problem report message:", message.get("error_msg"))
 
+    async def handle_get_active_menu(self, message):
+        print("HELOOOO")
+
+    async def handle_actionmenu(self, message):
+        print("HELOOOO action menu")
+
     async def handle_issue_credential_v2_0(self, message):
         state = message.get("state")
         cred_ex_id = message["cred_ex_id"]
@@ -559,6 +565,9 @@ class AriesAgent(DemoAgent):
 
     async def handle_basicmessages(self, message):
         self.log("Received message:", message["content"])
+
+    async def handle_get_active_menu(self, message):
+        print("HELOOOO")
 
     async def handle_endorse_transaction(self, message):
         self.log("Received transaction message:", message.get("state"))

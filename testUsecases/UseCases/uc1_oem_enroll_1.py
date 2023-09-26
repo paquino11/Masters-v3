@@ -11,7 +11,7 @@ from psycopg2 import sql
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import matplotlib.pyplot as plt
 import numpy as np
-import psutil, datetime
+import psutil, datetime, random
 
 
 def step1():
@@ -109,6 +109,7 @@ def step6():
 
 def step7():
     print("\nStep 7- During the first boot O:1 creates its public DID.")
+    time.sleep(random.uniform(0.4, 0.5))
 
 def step8():
     print("\nStep 8- Dave (D:1) clicks the OOB URI which opens his smart wallet via a deep link.")
@@ -266,6 +267,7 @@ def main():
     r, t = tfv2.time_execution(step10)
     categories.append('10')
     values.append(t)
+    time.sleep(10)
     r11, t = tfv2.time_execution(step11)
     categories.append('11')
     values.append(t)

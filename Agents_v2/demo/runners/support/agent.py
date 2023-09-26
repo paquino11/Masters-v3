@@ -1323,7 +1323,9 @@ class MediatorAgent(DemoAgent):
 
     async def handle_basicmessages(self, message):
         self.log("Received message:", message["content"])
-
+        
+    async def handle_get_active_menu(self, message):
+        print("HELOOOO")
 
 async def start_mediator_agent(
     start_port, genesis: str = None, genesis_txn_list: str = None
@@ -1443,9 +1445,13 @@ class EndorserAgent(DemoAgent):
 
     async def handle_basicmessages(self, message):
         self.log("Received message:", message["content"])
+    
+    async def handle_get_active_menu(self, message):
+        print("HELOOOO")
 
     async def handle_out_of_band(self, message):
         self.log("Received message:", message)
+
 
 
 async def start_endorser_agent(

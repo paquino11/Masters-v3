@@ -107,6 +107,9 @@ class AriesAgent(DemoAgent):
         print("handle_out_of_band()")
         pass
 
+    async def handle_get_active_menu(self, message):
+        print("HELOOOO")
+
     async def handle_connection_reuse(self, message):
         # we are reusing an existing connection, set our status to the existing connection
         if not self._connection_ready.done():
@@ -232,6 +235,9 @@ class AriesAgent(DemoAgent):
         elif state == "abandoned":
             log_status("Credential exchange abandoned")
             self.log("Problem report message:", message.get("error_msg"))
+
+    async def handle_get_active_menu(self, message):
+        print("HELOOOO")
 
     async def handle_issue_credential_v2_0(self, message):
         state = message.get("state")
@@ -570,6 +576,9 @@ class AriesAgent(DemoAgent):
     async def handle_basicmessages(self, message):
         self.log("Received message:", message["content"])
         self.lastmessage = message["content"]
+        
+    async def handle_get_active_menu(self, message):
+        print("HELOOOO")
 
     async def handle_endorse_transaction(self, message):
         self.log("Received transaction message:", message.get("state"))

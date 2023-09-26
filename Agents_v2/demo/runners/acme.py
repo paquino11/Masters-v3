@@ -108,6 +108,8 @@ class AcmeAgent(AriesAgent):
     async def handle_basicmessages(self, message):
         self.log("Received message:", message["content"])
 
+    async def handle_get_active_menu(self, message):
+        print("HELOOOO")
 
 async def main(args):
     acme_agent = await create_agent_with_args(args, ident="acme")

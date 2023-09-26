@@ -47,6 +47,43 @@ def step1():
 
 def step2():
     print("Step 2- D:1 selects “Register Device Model” along with the information requested by the associated form which includes Name, Description, Features array, Images array, and WoT file. ")
+    #get oem connection of cons
+    url = 'http://localhost:8181/connections'
+    headers = {'accept': 'application/json'}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        connection_id = None
+        
+        for result in data.get('results', []):
+            if result.get('their_label') == 'oem.egw.agent':
+                connection_id = result.get('connection_id')
+                break  # Stop searching once the desired connection is found
+        
+        if connection_id:
+            #print(f"Connection ID for 'oem.egw.agent': {connection_id}")
+            print("")
+        else:
+            print("No connection found for 'oem.egw.agent'")
+    else:
+        print(f"Request failed with status code: {response.status_code}")
+
+    base_url = 'http://localhost:8181/connections/'
+
+    url = f'{base_url}{connection_id}/send-message'
+
+    headers = {
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+
+    data = {
+        "content": "Device Model ID: devmodel134, Device Name: iWatch"
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+
+
 
 def step3():
     print("Step 3- C:1 generates a DeviceModelID and anchors the information into DT Ledger. ")
@@ -213,7 +250,7 @@ def main():
     bar_midpoints = np.array([bar_start + duration / 2 for bar_start, duration in zip(bar_starts, bar_durations)])
     bars = ax.barh(non_zero_categories, bar_durations, left=bar_starts, alpha=0.6)
     # Add values to the middle of each bar
-    for i, (category, midpoint) in enumerate(zip(non_zero_categories, bar_midpoints)):
+    for i, (category, midpoint) in enumerate(zip(non_zero_categories, bar_midpoints+0.2)):
         value = bar_durations[i]
         ax.text(midpoint, i, f'{value:.3f} s', va='center', ha='center')
 

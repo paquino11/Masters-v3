@@ -17,7 +17,6 @@ def step1_1():
 def step2_1():
     print("Step 2- During first boot, the EGW executes a script that boots egw:1.  ")
     agents.deploy_egw()
-    time.sleep(10)
 
 def step3_1():
     print("Step 3- egw:1 creates the public DID. ")
@@ -464,6 +463,7 @@ def main():
     categories.append('1_1')
     values.append(t)
     r, t = tfv2.time_execution(step2_1)
+    time.sleep(10)
     categories.append('1_2')
     values.append(t)
     r, t = tfv2.time_execution(step3_1)
