@@ -435,7 +435,6 @@ async def main(args):
         #    display_qr=True, reuse_connections=consortium_agent.reuse_connections, wait=True
         #)
         
-        #create SD and GW schema and credential def
         sd_gw_schema_name = "Genesis_VC"
         sd_gw_schema_attrs = [
             "name",
@@ -444,11 +443,7 @@ async def main(args):
             "manufactureDate",
             "timestamp",
         ]
-        consortium_agent.cred_def_id_sd_gw = await consortium_agent.create_schema_and_cred_def(
-                sd_gw_schema_name, sd_gw_schema_attrs
-            )
-        
-        #create SD and GW schema and credential def
+
         sd_gw_schema_name = "Ownership_VC"
         sd_gw_schema_attrs = [
             "deviceID",
@@ -456,6 +451,11 @@ async def main(args):
             "aquisitionDate",
             "timestamp",
         ]
+
+        consortium_agent.cred_def_id_sd_gw = await consortium_agent.create_schema_and_cred_def(
+                sd_gw_schema_name, sd_gw_schema_attrs
+            )
+        
         consortium_agent.cred_def_id_sd_gw = await consortium_agent.create_schema_and_cred_def(
                 sd_gw_schema_name, sd_gw_schema_attrs
             )
